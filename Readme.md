@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Lena Krasnikova](https://up.htmlacademy.ru/javascript/11/user/372919).
-* Наставник: [Олег Петров] (https://htmlacademy.ru/profile/id584951).
+* Наставник: [Олег Петров] (https://up.htmlacademy.ru/javascript/11/user584951).
 
 ---
 
