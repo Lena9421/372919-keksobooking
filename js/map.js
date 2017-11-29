@@ -71,6 +71,7 @@ var something = {
   },
 
   'offer': {
+    'title': getRandomWithoutRepeat(TITLES),
     'address': '',
     'price': getRandomNumber(MIN_PRICE, MAX_PRICE),
     'type': TYPES[getRandomElement(TYPES)],
@@ -78,12 +79,13 @@ var something = {
     'guests': getRandomNumber(GUESTS_MIN, GUESTS_MAX),
     'checkin': CHECKIN[getRandomElement(CHECKIN)],
     'checkout': CHECKOUT[getRandomElement(CHECKOUT)],
-    'features': FEATURES[getRandomElement(FEATURES)]
+    'features': FEATURES[getRandomElement(FEATURES)],
+    'description': [],
+    'photos': []
   },
   'location': {
     'x': getRandomNumber(LOCATION_X_MIN, LOCATION_X_MAX),
     'y': getRandomNumber(LOCATION_Y_MIN, LOCATION_Y_MAX)
   }
 };
-// 'description': []
-//  'photos': []
+
