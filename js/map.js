@@ -65,7 +65,7 @@ var getRandomWithoutRepeat = function () {
 
 console.log(getRandomWithoutRepeat(arr));
 
-var something = {
+var appartments = {
   'author': {
     'avatar': IMG_ADDRESS + IMG_PREFIX + getRandomNumber(IMG__MIN_COUNT, IMG_MAX_COUNT) + IMG_EXTENSION
   },
