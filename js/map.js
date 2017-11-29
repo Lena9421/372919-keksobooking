@@ -1,60 +1,60 @@
 'use strict';
 
 // константы
-var TITLES = ['Большая уютная квартира',
-  'Маленькая неуютная квартира',
-  'Огромный прекрасный дворец',
-  'Маленький ужасный дворец',
-  'Красивый гостевой домик',
-  'Некрасивый негостеприимный домик',
-  'Уютное бунгало далеко от моря',
-  'Неуютное бунгало по колено в воде'
-];
-var TYPES = ['flat', 'house', 'bungalo'];
-var ROOMS_MIN = 1;
-var ROOMS_MAX = 5;
-var MIN_PRICE = 1000;
-var MAX_PRICE = 100000;
-var GUESTS_MIN = 1;
-var GUESTS_MAX = 6;
-var CHECKIN = ['12:00', '13:00', '14:00'];
-var CHECKOUT = ['12:00', '13:00', '14:00'];
-var FEATURES = ['wifi',
-  'dishwasher',
-  'parking',
-  'washer',
-  'elevator',
-  'conditioner'
-];
-var description = '';
-var photos = [];
-var LOCATION_X_MIN = 300;
-var LOCATION_X_MAX = 900;
-var LOCATION_Y_MIN = 100;
-var LOCATION_Y_MAX = 500;
+var ImgProperties = {
+  ADDRESS: 'img/avatars/user',
+  PREFIX: 0,
+  EXTENSION: '.png'
+};
+var OfferInfo = {
+  TITLES: ['Большая уютная квартира',
+    'Маленькая неуютная квартира',
+    'Огромный прекрасный дворец',
+    'Маленький ужасный дворец',
+    'Красивый гостевой домик',
+    'Некрасивый негостеприимный домик',
+    'Уютное бунгало далеко от моря',
+    'Неуютное бунгало по колено в воде'
+  ],
+  TYPES: ['flat', 'house', 'bungalo'],
+  ROOMS_MIN: 1,
+  ROOMS_MAX: 5,
+  MIN_PRICE: 1000,
+  MAX_PRICE: 100000,
+  GUESTS_MIN: 1,
+  GUESTS_MAX: 6,
+  CHECKIN: ['12:00', '13:00', '14:00'],
+  CHECKOUT: ['12:00', '13:00', '14:00'],
+  FEATURES: ['wifi',
+    'dishwasher',
+    'parking',
+    'washer',
+    'elevator',
+    'conditioner'
+  ]
+};
+var Location = {
+  X_MIN: 300,
+  X_MAX: 900,
+  Y_MIN: 100,
+  Y_MAX: 500
+};
 
-// Функция выбирающая случайный элемент из массива (формула)
+// Функция выбирающая случайный элемент из массива
 var getRandomElement = function (array) {
   return Math.floor(Math.random() * (array.length));
 };
-// Функция выбирающая случайный элемент не включающая max
+// Функция выбирающая случайное целое число
+var getRandomInteger = function (min, max) {
+  return (Math.random().toFixed() * (max - min + 1)) + min;
+};
+// Функция выбирающая элемент не включающая max
 var getRandomNumber = function (min, max) {
-  return (Math.random() * (max - min + 1)) + min;
+  return (Math.random().toFixed(2) * (max - min + 1)) + min;
 };
 
-var IMG_ADDRESS = 'img/avatars/user';
-var IMG_PREFIX = 0;
-var IMG__MIN_COUNT = 1;
-var IMG_MAX_COUNT = 8;
-var IMG_EXTENSION = '.png';
-
-// arr.splice(index[, deleteCount, elem1, ..., elemN])
-// arr.splice(1, 1); // начиная с позиции 1, удалить 1 элемент
 // функция, выбирающая случайный номер без повторов
-
-
-var arr = [1, 2, 3, 4, 5, 6, 7, 8];
-var getRandomWithoutRepeat = function () {
+var getRandomWithoutRepeat = function (arr) {
   var randomElements = [];
   var arrcopy = arr.slice();
   for (var i = 0; i < arr.length; i++) {
@@ -62,30 +62,54 @@ var getRandomWithoutRepeat = function () {
   }
   return randomElements;
 };
+// arr.splice(index[, deleteCount, elem1, ..., elemN])
+// arr.splice(1, 1); // начиная с позиции 1, удалить 1 элемент
 
-console.log(getRandomWithoutRepeat(arr));
-
-var appartments = {
-  'author': {
-    'avatar': IMG_ADDRESS + IMG_PREFIX + getRandomNumber(IMG__MIN_COUNT, IMG_MAX_COUNT) + IMG_EXTENSION
-  },
-
-  'offer': {
-    'title': getRandomWithoutRepeat(TITLES),
-    'address': '',
-    'price': getRandomNumber(MIN_PRICE, MAX_PRICE),
-    'type': TYPES[getRandomElement(TYPES)],
-    'rooms': getRandomNumber(ROOMS_MIN, ROOMS_MAX),
-    'guests': getRandomNumber(GUESTS_MIN, GUESTS_MAX),
-    'checkin': CHECKIN[getRandomElement(CHECKIN)],
-    'checkout': CHECKOUT[getRandomElement(CHECKOUT)],
-    'features': FEATURES[getRandomElement(FEATURES)],
-    'description': [],
-    'photos': []
-  },
-  'location': {
-    'x': getRandomNumber(LOCATION_X_MIN, LOCATION_X_MAX),
-    'y': getRandomNumber(LOCATION_Y_MIN, LOCATION_Y_MAX)
-  }
+// функция, которая выдает нам адрес изображения для аватара
+var avatarAddress = function (number) {
+  return ImgProperties.ADDRESS + ImgProperties.PREFIX + number
+    + ImgProperties.EXTENSION;
 };
 
+// создадим объект apartments содержащий все необходимые свойства для вывода информации о сдаваемом жилье
+var getOffer = function (i) {
+  return {
+    'author': {
+      'avatar': avatarAddress(i + 1)
+    },
+    'offer': {
+      'title': getRandomElement(OfferInfo.TITLES),
+      'address': '',
+      'price': getRandomInteger(OfferInfo.MIN_PRICE, OfferInfo.MAX_PRICE),
+      'type': OfferInfo.TYPES[getRandomElement(OfferInfo.TYPES)],
+      'rooms': getRandomInteger(OfferInfo.ROOMS_MIN, OfferInfo.ROOMS_MAX),
+      'guests': getRandomInteger(OfferInfo.GUESTS_MIN, OfferInfo.GUESTS_MAX),
+      'checkin': OfferInfo.CHECKIN[getRandomElement(OfferInfo.CHECKIN)],
+      'checkout': OfferInfo.CHECKOUT[getRandomElement(OfferInfo.CHECKOUT)],
+      'features': getRandomWithoutRepeat(OfferInfo.FEATURES),
+      'description': '',
+      'photos': []
+    },
+    'Location': {
+      x: getRandomNumber(Location.X_MIN, Location.X_MAX),
+      y: getRandomNumber(Location.Y_MIN, Location.Y_MAX)
+    }
+  };
+};
+
+var getOffersArray = function (arrayLength) {
+  var offersArray = [];
+  for (var i = 0; i < arrayLength; i++) {
+    offersArray[i] = getOffer(i);
+  }
+  return offersArray;
+};
+var offersCount = 8;
+var allOffers = getOffersArray(offersCount);
+
+console.log(getOffersArray(8));
+
+var map = document.querySelector('.map');
+map.classList.remove('map--faded');
+
+// var pin = document.querySelector('.map__pin');
