@@ -113,7 +113,6 @@ var getOffer = function (i) {
   };
 };
 
-
 var getOffersArray = function (arrayLength) {
   var offersArray = [];
   for (var i = 0; i < arrayLength; i++) {
@@ -129,4 +128,21 @@ console.log(getOffersArray(8));
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
 
-// var pin = document.querySelector('.map__pin');
+// На основе данных, созданных в первом пункте, создайте DOM-элементы, соответствующие меткам на карте,
+// и заполните их данными из массива. Итоговая разметка метки должна выглядеть следующим образом:
+
+// <button style="
+// left: {{location.x}}px;
+// top: {{location.y}}px;"
+// class="map__pin">
+// <img src="{{author.avatar}}"
+// width="40" height="40" draggable="false">
+// </button>
+
+var left = locationX + 'px';
+var top = locationY + 'px';
+var mapPin = document.querySelector('template').content.querySelector('button.map__pin');
+var mapCard = document.querySelector('template').content.querySelector('.map__card');
+var newPin = mapPin.cloneNode(true);
+newPin.style = left + top;
+newPin.querySelector('img').src = author.avatar;
