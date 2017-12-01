@@ -44,16 +44,12 @@ var Location = {
 var getRandomElement = function (array) {
   return Math.floor(Math.random() * (array.length));
 };
-// Функция выбирающая случайное целое число
+// Функция выбирающая случайное число в заданном диапозоне
 var getRandomInteger = function (min, max) {
-  return (Math.random().toFixed() * (max - min + 1)) + min;
-};
-// Функция выбирающая элемент не включающая max
-var getRandomNumber = function (min, max) {
-  return (Math.random().toFixed(2) * (max - min + 1)) + min;
+  return (Math.random() * (max - min)) + min;
 };
 
-// функция, выбирающая случайный номер без повторов
+// функция, выбирающая случайный номер из массива без повторов (результат - все элементы массива в разном порядке)
 var getRandomWithoutRepeat = function (arr) {
   var randomElements = [];
   var arrcopy = arr.slice();
@@ -62,6 +58,21 @@ var getRandomWithoutRepeat = function (arr) {
   }
   return randomElements;
 };
+
+var randomArrayLength = getRandomInteger(1, OfferInfo.FEATURES.length);
+
+var getRandomFeatures = function (arr, arraylength) {
+  var randomFeatures = [];
+  var arrcopy = arr.slice();
+  // зададим случайную длину массива
+  for (var i = 0; i < arraylength; i++) {
+    //  приравняем массив к выражению, в котором используется метод splice по отношению
+    // к копии масива, при чем, каждый раз вырезается рандомный элемент
+    randomFeatures[i] = arrcopy.splice(getRandomElement(arrcopy), 1) + '';
+  }
+  return  randomFeatures;
+};
+console.log(getRandomFeatures(OfferInfo.FEATURES, randomArrayLength));
 // arr.splice(index[, deleteCount, elem1, ..., elemN])
 // arr.splice(1, 1); // начиная с позиции 1, удалить 1 элемент
 
@@ -70,6 +81,11 @@ var avatarAddress = function (number) {
   return ImgProperties.ADDRESS + ImgProperties.PREFIX + number
     + ImgProperties.EXTENSION;
 };
+var locationX = getRandomInteger(Location.X_MIN, Location.X_MAX).toFixed();
+var locationY = getRandomInteger(Location.Y_MIN, Location.Y_MAX).toFixed();
+
+var address = locationX
+  + ', ' + locationY;
 
 // создадим объект apartments содержащий все необходимые свойства для вывода информации о сдаваемом жилье
 var getOffer = function (i) {
@@ -78,24 +94,25 @@ var getOffer = function (i) {
       'avatar': avatarAddress(i + 1)
     },
     'offer': {
-      'title': getRandomElement(OfferInfo.TITLES),
-      'address': '',
-      'price': getRandomInteger(OfferInfo.MIN_PRICE, OfferInfo.MAX_PRICE),
+      'title': OfferInfo.TITLES[getRandomElement(OfferInfo.TITLES)],
+      'address': address,
+      'price': getRandomInteger(OfferInfo.MIN_PRICE, OfferInfo.MAX_PRICE).toFixed(),
       'type': OfferInfo.TYPES[getRandomElement(OfferInfo.TYPES)],
-      'rooms': getRandomInteger(OfferInfo.ROOMS_MIN, OfferInfo.ROOMS_MAX),
-      'guests': getRandomInteger(OfferInfo.GUESTS_MIN, OfferInfo.GUESTS_MAX),
+      'rooms': getRandomInteger(OfferInfo.ROOMS_MIN, OfferInfo.ROOMS_MAX).toFixed(),
+      'guests': getRandomInteger(OfferInfo.GUESTS_MIN, OfferInfo.GUESTS_MAX).toFixed(),
       'checkin': OfferInfo.CHECKIN[getRandomElement(OfferInfo.CHECKIN)],
       'checkout': OfferInfo.CHECKOUT[getRandomElement(OfferInfo.CHECKOUT)],
-      'features': getRandomWithoutRepeat(OfferInfo.FEATURES),
+      'features': getRandomFeatures(OfferInfo.FEATURES, randomArrayLength),
       'description': '',
       'photos': []
     },
     'Location': {
-      x: getRandomNumber(Location.X_MIN, Location.X_MAX),
-      y: getRandomNumber(Location.Y_MIN, Location.Y_MAX)
+      x: locationX,
+      y: locationY
     }
   };
 };
+
 
 var getOffersArray = function (arrayLength) {
   var offersArray = [];
