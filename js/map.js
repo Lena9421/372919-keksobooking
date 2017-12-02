@@ -62,10 +62,10 @@ var getRandomWithoutRepeat = function (arr) {
 
 var randomArrayLength = getRandomInteger(1, OfferInfo.FEATURES.length);
 
+// создадим функцию для генерации массива случайной длины
 var getRandomFeatures = function (arr, arraylength) {
   var randomFeatures = [];
   var arrcopy = arr.slice();
-  // зададим случайную длину массива
   for (var i = 0; i < arraylength; i++) {
     //  приравняем массив к выражению, в котором используется метод splice по отношению
     // к копии масива, при чем, каждый раз вырезается рандомный элемент
@@ -78,14 +78,14 @@ console.log(getRandomFeatures(OfferInfo.FEATURES, randomArrayLength));
 // arr.splice(1, 1); // начиная с позиции 1, удалить 1 элемент
 
 // функция, которая выдает нам адрес изображения для аватара
-var avatarAddress = function (number) {
-  return ImgProperties.ADDRESS + ImgProperties.PREFIX + number
+var avatarAddress = function (numberOfArrayElement) {
+  return ImgProperties.ADDRESS + ImgProperties.PREFIX + numberOfArrayElement
     + ImgProperties.EXTENSION;
 };
 
 // var address = locationX + ', ' + locationY;
 
-// создадим объект apartments содержащий все необходимые свойства для вывода информации о сдаваемом жилье
+// создадим функцию, которая генерирует объект содержащий все необходимые свойства для вывода информации о сдаваемом жилье
 var getOffer = function (i) {
   var locationX = getRandomInteger(Location.X_MIN, Location.X_MAX).toFixed();
   var locationY = getRandomInteger(Location.Y_MIN, Location.Y_MAX).toFixed();
@@ -111,22 +111,26 @@ var getOffer = function (i) {
       y: locationY
     }
   };
+};
+//создадим функцию которая генерирует массив из объектов
 
 var getOffersArray = function (arrayLength) {
-    var offersArray = [];
-    for (var i = 0; i < arrayLength; i++) {
-      offersArray[i] = getOffer(i);
-    }
-    return offersArray;
-  };
-
-  var offersCount = 8;
-  var allOffers = getOffersArray(offersCount);
+  var offersArray = [];
+  for (var i = 0; i < arrayLength; i++) {
+    offersArray[i] = getOffer(i);
+  }
+  return offersArray;
+};
+// количество объектов в массиве равно 8
+var offersCount = 8;
+// создадим переменную в которую сложим все значения, которые генерирует функция  getOffersArray
+var allOffers = getOffersArray(offersCount);
 
 console.log(getOffersArray(offersCount));
-
-// var map = document.querySelector('.map');
-// map.classList.remove('map--faded');
+// создадим переменную, которая выбирает дом элемент с классом .map
+var map = document.querySelector('.map');
+// у блока сложенного в переменную map удалим класс   map--faded
+map.classList.remove('map--faded');
 
 // На основе данных, созданных в первом пункте, создайте DOM-элементы, соответствующие меткам на карте,
 // и заполните их данными из массива. Итоговая разметка метки должна выглядеть следующим образом:
@@ -139,30 +143,36 @@ console.log(getOffersArray(offersCount));
 // width="40" height="40" draggable="false">
 // </button>
 
+// создадим функцию генерации пинов
+// в переменную  newPin  клонируем выбранный DOM элемент с классом .map__pin
+// стилизуем элементы клонированной DOM ноды
+var generatePin = function (info) {
+  var mapPin = document.querySelector('template').content.querySelector('.map__pin');
+  var newPin = mapPin.cloneNode(true);
+  newPin.style.left = info.Location.x + 'px';
+  newPin.style.top = info.Location.y + 'px';
+  newPin.querySelector('img').src = info.author.avatar;
+  return newPin;
+};
 
-// var getSmth = function () {
-//   var left = locationX + 'px';
-//   var top = locationY + 'px';
-//   var mapPin = document.querySelector('template').content.querySelector('button.map__pin');
-//   var mapCard = document.querySelector('template').content.querySelector('.map__card');
-//   var newPin = mapPin.cloneNode(true);
-//   newPin.style = left + top;
-//   newPin.querySelector('img').src = avatarAddress(7);
-//   return newPin;
-// };
-// var createPins = function (allOffers) {
-//   var fragment = document.createDocumentFragment();
-//   for (var i = 0; i < allOffers.length; i++) {
-//     fragment.appendChild(getSmth(allOffers[i]));
-//   }
-//   mapPins.appendChild(fragment);
-// };
-// createPins(allOffers);
-// console.log(createPins(allOffers));
+console.log(generatePin(getOffer(offersCount)));
 
-// Отрисуйте сгенерированные DOM-элементы в блок .map__pins.
-// Для вставки элементов используйте DocumentFragment.
+// создадим функцию которая отрисует сгенерированные DOM элементы в блок с классом .map__pins.
+// Для вставки элементов используем DocumentFragment.
 
-// var mapPins = map.querySelector('.map__pins');
+var mapPins = map.querySelector('.map__pins');
+var createPins = function (array) {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < array.length; i++) {
+    fragment.appendChild(generatePin(allOffers[i]));
+  }
+  mapPins.appendChild(fragment);
+};
 
+createPins(allOffers);
+
+// На основе первого по порядку элемента из сгенерированного массива и шаблона template article.map__card
+// создайте DOM-элемент объявления,
+// заполните его данными из объекта
+// и вставьте полученный DOM-элемент в блок .map перед блоком .map__filters-container
 
