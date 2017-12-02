@@ -49,7 +49,8 @@ var getRandomInteger = function (min, max) {
   return (Math.random() * (max - min)) + min;
 };
 
-// функция, выбирающая случайный номер из массива без повторов (результат - все элементы массива в разном порядке)
+// функция, выбирающая случайный номер из массива без повторов
+// (результат - все элементы массива в разном порядке)
 var getRandomWithoutRepeat = function (arr) {
   var randomElements = [];
   var arrcopy = arr.slice();
@@ -70,7 +71,7 @@ var getRandomFeatures = function (arr, arraylength) {
     // к копии масива, при чем, каждый раз вырезается рандомный элемент
     randomFeatures[i] = arrcopy.splice(getRandomElement(arrcopy), 1) + '';
   }
-  return  randomFeatures;
+  return randomFeatures;
 };
 console.log(getRandomFeatures(OfferInfo.FEATURES, randomArrayLength));
 // arr.splice(index[, deleteCount, elem1, ..., elemN])
@@ -81,21 +82,20 @@ var avatarAddress = function (number) {
   return ImgProperties.ADDRESS + ImgProperties.PREFIX + number
     + ImgProperties.EXTENSION;
 };
-var locationX = getRandomInteger(Location.X_MIN, Location.X_MAX).toFixed();
-var locationY = getRandomInteger(Location.Y_MIN, Location.Y_MAX).toFixed();
 
-var address = locationX
-  + ', ' + locationY;
+// var address = locationX + ', ' + locationY;
 
 // создадим объект apartments содержащий все необходимые свойства для вывода информации о сдаваемом жилье
 var getOffer = function (i) {
+  var locationX = getRandomInteger(Location.X_MIN, Location.X_MAX).toFixed();
+  var locationY = getRandomInteger(Location.Y_MIN, Location.Y_MAX).toFixed();
   return {
     'author': {
       'avatar': avatarAddress(i + 1)
     },
     'offer': {
       'title': OfferInfo.TITLES[getRandomElement(OfferInfo.TITLES)],
-      'address': address,
+      'address': locationX + ', ' + locationY,
       'price': getRandomInteger(OfferInfo.MIN_PRICE, OfferInfo.MAX_PRICE).toFixed(),
       'type': OfferInfo.TYPES[getRandomElement(OfferInfo.TYPES)],
       'rooms': getRandomInteger(OfferInfo.ROOMS_MIN, OfferInfo.ROOMS_MAX).toFixed(),
@@ -111,22 +111,22 @@ var getOffer = function (i) {
       y: locationY
     }
   };
-};
 
 var getOffersArray = function (arrayLength) {
-  var offersArray = [];
-  for (var i = 0; i < arrayLength; i++) {
-    offersArray[i] = getOffer(i);
-  }
-  return offersArray;
-};
-var offersCount = 8;
-var allOffers = getOffersArray(offersCount);
+    var offersArray = [];
+    for (var i = 0; i < arrayLength; i++) {
+      offersArray[i] = getOffer(i);
+    }
+    return offersArray;
+  };
 
-console.log(getOffersArray(8));
+  var offersCount = 8;
+  var allOffers = getOffersArray(offersCount);
 
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+console.log(getOffersArray(offersCount));
+
+// var map = document.querySelector('.map');
+// map.classList.remove('map--faded');
 
 // На основе данных, созданных в первом пункте, создайте DOM-элементы, соответствующие меткам на карте,
 // и заполните их данными из массива. Итоговая разметка метки должна выглядеть следующим образом:
@@ -139,10 +139,30 @@ map.classList.remove('map--faded');
 // width="40" height="40" draggable="false">
 // </button>
 
-var left = locationX + 'px';
-var top = locationY + 'px';
-var mapPin = document.querySelector('template').content.querySelector('button.map__pin');
-var mapCard = document.querySelector('template').content.querySelector('.map__card');
-var newPin = mapPin.cloneNode(true);
-newPin.style = left + top;
-newPin.querySelector('img').src = author.avatar;
+
+// var getSmth = function () {
+//   var left = locationX + 'px';
+//   var top = locationY + 'px';
+//   var mapPin = document.querySelector('template').content.querySelector('button.map__pin');
+//   var mapCard = document.querySelector('template').content.querySelector('.map__card');
+//   var newPin = mapPin.cloneNode(true);
+//   newPin.style = left + top;
+//   newPin.querySelector('img').src = avatarAddress(7);
+//   return newPin;
+// };
+// var createPins = function (allOffers) {
+//   var fragment = document.createDocumentFragment();
+//   for (var i = 0; i < allOffers.length; i++) {
+//     fragment.appendChild(getSmth(allOffers[i]));
+//   }
+//   mapPins.appendChild(fragment);
+// };
+// createPins(allOffers);
+// console.log(createPins(allOffers));
+
+// Отрисуйте сгенерированные DOM-элементы в блок .map__pins.
+// Для вставки элементов используйте DocumentFragment.
+
+// var mapPins = map.querySelector('.map__pins');
+
+
