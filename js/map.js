@@ -83,10 +83,8 @@ var avatarAddress = function (numberOfArrayElement) {
     + ImgProperties.EXTENSION;
 };
 
-// var address = locationX + ', ' + locationY;
-
 // создадим функцию, которая генерирует объект содержащий все необходимые свойства для вывода информации о сдаваемом жилье
-var getOffer = function (i) {
+var generateOffer = function (i) {
   var locationX = getRandomInteger(Location.X_MIN, Location.X_MAX).toFixed();
   var locationY = getRandomInteger(Location.Y_MIN, Location.Y_MAX).toFixed();
   return {
@@ -112,12 +110,11 @@ var getOffer = function (i) {
     }
   };
 };
-//создадим функцию которая генерирует массив из объектов
-
+// создадим функцию которая генерирует массив из объектов
 var getOffersArray = function (arrayLength) {
   var offersArray = [];
   for (var i = 0; i < arrayLength; i++) {
-    offersArray[i] = getOffer(i);
+    offersArray[i] = generateOffer(i);
   }
   return offersArray;
 };
@@ -132,16 +129,6 @@ var map = document.querySelector('.map');
 // у блока сложенного в переменную map удалим класс   map--faded
 map.classList.remove('map--faded');
 
-// На основе данных, созданных в первом пункте, создайте DOM-элементы, соответствующие меткам на карте,
-// и заполните их данными из массива. Итоговая разметка метки должна выглядеть следующим образом:
-
-// <button style="
-// left: {{location.x}}px;
-// top: {{location.y}}px;"
-// class="map__pin">
-// <img src="{{author.avatar}}"
-// width="40" height="40" draggable="false">
-// </button>
 
 // создадим функцию генерации пинов
 // в переменную  newPin  клонируем выбранный DOM элемент с классом .map__pin
@@ -155,11 +142,10 @@ var generatePin = function (info) {
   return newPin;
 };
 
-console.log(generatePin(getOffer(offersCount)));
+generatePin(generateOffer(offersCount));
 
-// создадим функцию которая отрисует сгенерированные DOM элементы в блок с классом .map__pins.
+// создадим функцию  createPins которая отрисует сгенерированные DOM элементы в блок с классом .map__pins.
 // Для вставки элементов используем DocumentFragment.
-
 var mapPins = map.querySelector('.map__pins');
 var createPins = function (array) {
   var fragment = document.createDocumentFragment();
@@ -172,7 +158,43 @@ var createPins = function (array) {
 createPins(allOffers);
 
 // На основе первого по порядку элемента из сгенерированного массива и шаблона template article.map__card
-// создайте DOM-элемент объявления,
-// заполните его данными из объекта
-// и вставьте полученный DOM-элемент в блок .map перед блоком .map__filters-container
+// создадим DOM-элемент объявления,
+// заполним его данными из объекта
+// и вставим полученный DOM-элемент в блок .map
+// перед блоком .map__filters-container
+// В список .popup__features выведите все доступные удобства в квартире из массива {{offer.features}}
+// пустыми элементами списка (<li>) с классом feature feature--{{название удобства}}
+
+
+var template = document.querySelector('template').content;
+template.querySelector('.popup__features').innerHTML = '';
+var ulElement = document.querySelector('.popup__features');
+
+var getFeaturesList = function (features) {
+  var liFragment = document.createDocumentFragment();
+  for (var i = 0; i < features.length; i++) {
+    var newElement = document.createElement('li');
+    newElement.className = 'feature feature--' + features[i];
+    liFragment.appendChild(newElement);
+  }
+  ulElement.appendChild(liFragment);
+};
+
+var renderCard = function (info) {
+  template = document.querySelector('template');
+  var mapCard = template.content.querySelector('article.map__card');
+  var cardElement = mapCard.cloneNode(true);
+  var mapCardP = mapCard.querySelectorAll('p');
+  cardElement.querySelector('h3').textContent = info.offer.title;
+  cardElement.querySelector('.popup__price').innerHTML = info.offer.price + '&#x20bd;/ночь';
+  cardElement.querySelector('small').textContent = info.offer.address;
+  cardElement.querySelector('.popup__avatar').setAttribute('src', info.author.avatar);
+  mapCardP[2].textContent = info.offer.rooms + ' комнаты для ' + info.offer.guests + ' гостей';
+  mapCardP[3].textContent = 'Заезд после ' + info.offer.checkin + ', выезд до ' + info.offer.checkout;
+  mapCardP[4].textContent = info.offer.description;
+  map.insertBefore(cardElement, document.querySelector('map__filters-container'));
+  return mapCard;
+};
+
+renderCard(generateOffer(0));
 
