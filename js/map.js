@@ -49,19 +49,7 @@ var getRandomInteger = function (min, max) {
   return (Math.random() * (max - min)) + min;
 };
 
-// функция, выбирающая случайный номер из массива без повторов
-// (результат - все элементы массива в разном порядке)
-// var getRandomWithoutRepeat = function (arr) {
-//   var randomElements = [];
-//   var arrcopy = arr.slice();
-//   for (var i = 0; i < arr.length; i++) {
-//     randomElements[i] = arrcopy.splice(getRandomElement(arrcopy), 1);
-//   }
-//   return randomElements;
-// };
-
 var randomArrayLength = getRandomInteger(1, OfferInfo.FEATURES.length);
-
 // создадим функцию для генерации массива случайной длины
 var getRandomFeatures = function (arr, arraylength) {
   var randomFeatures = [];
@@ -75,8 +63,6 @@ var getRandomFeatures = function (arr, arraylength) {
 };
 
 getRandomFeatures(OfferInfo.FEATURES, randomArrayLength);
-// arr.splice(index[, deleteCount, elem1, ..., elemN])
-// arr.splice(1, 1); // начиная с позиции 1, удалить 1 элемент
 
 // функция, которая выдает нам адрес изображения для аватара
 var avatarAddress = function (numberOfArrayElement) {
@@ -84,7 +70,8 @@ var avatarAddress = function (numberOfArrayElement) {
     + ImgProperties.EXTENSION;
 };
 
-// создадим функцию, которая генерирует объект содержащий все необходимые свойства для вывода информации о сдаваемом жилье
+// создадим функцию, которая генерирует объект содержащий все необходимые
+// свойства для вывода информации о сдаваемом жилье
 var generateOffer = function (i) {
   var locationX = getRandomInteger(Location.X_MIN, Location.X_MAX).toFixed();
   var locationY = getRandomInteger(Location.Y_MIN, Location.Y_MAX).toFixed();
@@ -111,6 +98,7 @@ var generateOffer = function (i) {
     }
   };
 };
+
 // создадим функцию которая генерирует массив из объектов
 var getOffersArray = function (arrayLength) {
   var offersArray = [];
@@ -124,12 +112,10 @@ var offersCount = 8;
 // создадим переменную в которую сложим все значения, которые генерирует функция  getOffersArray
 var allOffers = getOffersArray(offersCount);
 
-(getOffersArray(offersCount));
 // создадим переменную, которая выбирает дом элемент с классом .map
 var map = document.querySelector('.map');
 // у блока сложенного в переменную map удалим класс   map--faded
 map.classList.remove('map--faded');
-
 
 // создадим функцию генерации пинов
 // в переменную  newPin  клонируем выбранный DOM элемент с классом .map__pin
@@ -178,10 +164,11 @@ var renderCard = function (info) {
   var template = document.querySelector('template');
   var mapCard = template.content.querySelector('article.map__card');
   var cardElement = mapCard.cloneNode(true);
-  var mapCardP = mapCard.querySelectorAll('p');
+  var mapCardP = cardElement.querySelectorAll('p');
   var ulElement = cardElement.querySelector('.popup__features');
-  cardElement.querySelector('.popup__features').innerHTML = '';
+  cardElement.querySelector('.popup__features').textContent = '';
   cardElement.querySelector('h3').textContent = info.offer.title;
+  cardElement.querySelector('h4').textContent = info.offer.type;
   cardElement.querySelector('.popup__price').innerHTML = info.offer.price + '&#x20bd;/ночь';
   cardElement.querySelector('small').textContent = info.offer.address;
   cardElement.querySelector('.popup__avatar').setAttribute('src', info.author.avatar);
