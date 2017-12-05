@@ -73,6 +73,7 @@ var getRandomFeatures = function (arr, arraylength) {
   }
   return randomFeatures;
 };
+
 console.log(getRandomFeatures(OfferInfo.FEATURES, randomArrayLength));
 // arr.splice(index[, deleteCount, elem1, ..., elemN])
 // arr.splice(1, 1); // начиная с позиции 1, удалить 1 элемент
@@ -165,26 +166,21 @@ createPins(allOffers);
 // В список .popup__features выведите все доступные удобства в квартире из массива {{offer.features}}
 // пустыми элементами списка (<li>) с классом feature feature--{{название удобства}}
 
-
-var template = document.querySelector('template').content;
-template.querySelector('.popup__features').innerHTML = '';
-var ulElement = document.querySelector('.popup__features');
-
-var getFeaturesList = function (features) {
+var getFeatureElement = function (featureElement) {
   var liFragment = document.createDocumentFragment();
-  for (var i = 0; i < features.length; i++) {
-    var newElement = document.createElement('li');
-    newElement.className = 'feature feature--' + features[i];
-    liFragment.appendChild(newElement);
-  }
-  ulElement.appendChild(liFragment);
+  var newElement = document.createElement('li');
+  newElement.className = 'feature feature--' + featureElement;
+  liFragment.appendChild(newElement);
+  return liFragment;
 };
 
 var renderCard = function (info) {
-  template = document.querySelector('template');
+  var template = document.querySelector('template');
   var mapCard = template.content.querySelector('article.map__card');
   var cardElement = mapCard.cloneNode(true);
   var mapCardP = mapCard.querySelectorAll('p');
+  var ulElement = cardElement.querySelector('.popup__features');
+  cardElement.querySelector('.popup__features').innerHTML = '';
   cardElement.querySelector('h3').textContent = info.offer.title;
   cardElement.querySelector('.popup__price').innerHTML = info.offer.price + '&#x20bd;/ночь';
   cardElement.querySelector('small').textContent = info.offer.address;
@@ -193,8 +189,12 @@ var renderCard = function (info) {
   mapCardP[3].textContent = 'Заезд после ' + info.offer.checkin + ', выезд до ' + info.offer.checkout;
   mapCardP[4].textContent = info.offer.description;
   map.insertBefore(cardElement, document.querySelector('map__filters-container'));
+  var features = getRandomFeatures(OfferInfo.FEATURES, randomArrayLength);
+  for (var i = 0; i < features.length; i++) {
+    var element = getFeatureElement(features[i]);
+    ulElement.appendChild(element);
+  }
   return mapCard;
 };
 
 renderCard(generateOffer(0));
-
