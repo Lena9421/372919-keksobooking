@@ -40,6 +40,12 @@ var Location = {
   Y_MAX: 500
 };
 
+var offerType = {
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalo: 'Бунгало',
+  palace: 'Дворец'
+};
 // Функция выбирающая случайный элемент из массива
 var getRandomElement = function (array) {
   return Math.floor(Math.random() * (array.length));
@@ -168,19 +174,19 @@ var renderCard = function (info) {
   var ulElement = cardElement.querySelector('.popup__features');
   cardElement.querySelector('.popup__features').textContent = '';
   cardElement.querySelector('h3').textContent = info.offer.title;
-  cardElement.querySelector('h4').textContent = info.offer.type;
+  cardElement.querySelector('h4').textContent = offerType[info.offer.type];
   cardElement.querySelector('.popup__price').innerHTML = info.offer.price + '&#x20bd;/ночь';
   cardElement.querySelector('small').textContent = info.offer.address;
   cardElement.querySelector('.popup__avatar').setAttribute('src', info.author.avatar);
   mapCardP[2].textContent = info.offer.rooms + ' комнаты для ' + info.offer.guests + ' гостей';
   mapCardP[3].textContent = 'Заезд после ' + info.offer.checkin + ', выезд до ' + info.offer.checkout;
-  mapCardP[4].textContent = info.offer.description;
   map.insertBefore(cardElement, document.querySelector('map__filters-container'));
   var features = getRandomFeatures(OfferInfo.FEATURES, randomArrayLength);
   for (var i = 0; i < features.length; i++) {
     var element = getFeatureElement(features[i]);
     ulElement.appendChild(element);
   }
+  mapCardP[4].textContent = info.offer.description;
   return mapCard;
 };
 
