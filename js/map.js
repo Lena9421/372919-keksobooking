@@ -51,14 +51,14 @@ var getRandomInteger = function (min, max) {
 
 // функция, выбирающая случайный номер из массива без повторов
 // (результат - все элементы массива в разном порядке)
-var getRandomWithoutRepeat = function (arr) {
-  var randomElements = [];
-  var arrcopy = arr.slice();
-  for (var i = 0; i < arr.length; i++) {
-    randomElements[i] = arrcopy.splice(getRandomElement(arrcopy), 1);
-  }
-  return randomElements;
-};
+// var getRandomWithoutRepeat = function (arr) {
+//   var randomElements = [];
+//   var arrcopy = arr.slice();
+//   for (var i = 0; i < arr.length; i++) {
+//     randomElements[i] = arrcopy.splice(getRandomElement(arrcopy), 1);
+//   }
+//   return randomElements;
+// };
 
 var randomArrayLength = getRandomInteger(1, OfferInfo.FEATURES.length);
 
@@ -74,7 +74,7 @@ var getRandomFeatures = function (arr, arraylength) {
   return randomFeatures;
 };
 
-console.log(getRandomFeatures(OfferInfo.FEATURES, randomArrayLength));
+getRandomFeatures(OfferInfo.FEATURES, randomArrayLength);
 // arr.splice(index[, deleteCount, elem1, ..., elemN])
 // arr.splice(1, 1); // начиная с позиции 1, удалить 1 элемент
 
@@ -124,7 +124,7 @@ var offersCount = 8;
 // создадим переменную в которую сложим все значения, которые генерирует функция  getOffersArray
 var allOffers = getOffersArray(offersCount);
 
-console.log(getOffersArray(offersCount));
+(getOffersArray(offersCount));
 // создадим переменную, которая выбирает дом элемент с классом .map
 var map = document.querySelector('.map');
 // у блока сложенного в переменную map удалим класс   map--faded
