@@ -39,7 +39,8 @@ var Location = {
   Y_MIN: 100,
   Y_MAX: 500
 };
-
+// объект соответствия недвижимости
+// offerType[info.offer.type] 
 var offerType = {
   flat: 'Квартира',
   house: 'Дом',
