@@ -54,9 +54,10 @@ var getRandomElement = function (array) {
 var getRandomInteger = function (min, max) {
   return (Math.random() * (max - min)) + min;
 };
-
+// создадим переменную для хранения результата выполнения функции.
+// Результат - случайная длинна массива в диапазоне от 1 до длины массива с OfferInfo.features
 var randomArrayLength = getRandomInteger(1, OfferInfo.FEATURES.length);
-// создадим функцию для генерации массива случайной длины
+// создадим функцию для генерации массива случайной длины фич
 var getRandomFeatures = function (arr, arraylength) {
   var randomFeatures = [];
   var arrcopy = arr.slice();
@@ -121,21 +122,25 @@ var allOffers = getOffersArray(offersCount);
 // создадим переменную, которая выбирает дом элемент с классом .map
 var map = document.querySelector('.map');
 // у блока сложенного в переменную map удалим класс   map--faded
-map.classList.remove('map--faded');
+// map.classList.remove('map--faded');
 
 // создадим функцию генерации пинов
 // в переменную  newPin  клонируем выбранный DOM элемент с классом .map__pin
 // стилизуем элементы клонированной DOM ноды
-var generatePin = function (info) {
+// var mapPinExeptMain = map.querySelector('.map__pin:not(.map__pin--main)');
+
+
+var generatePin = function (offer) {
   var mapPin = document.querySelector('template').content.querySelector('.map__pin');
   var newPin = mapPin.cloneNode(true);
-  newPin.style.left = info.Location.x + 'px';
-  newPin.style.top = info.Location.y + 'px';
-  newPin.querySelector('img').src = info.author.avatar;
+  newPin.style.left = offer.Location.x + 'px';
+  newPin.style.top = offer.Location.y + 'px';
+  newPin.querySelector('img').src = offer.author.avatar;
+  newPin.addEventListener('click', function (evt) {
+    onPinClick(evt, offer);
+  });
   return newPin;
 };
-
-generatePin(generateOffer(offersCount));
 
 // создадим функцию  createPins которая отрисует сгенерированные DOM элементы в блок с классом .map__pins.
 // Для вставки элементов используем DocumentFragment.
@@ -148,7 +153,7 @@ var createPins = function (array) {
   mapPins.appendChild(fragment);
 };
 
-createPins(allOffers);
+// createPins(allOffers);
 
 // На основе первого по порядку элемента из сгенерированного массива и шаблона template article.map__card
 // создадим DOM-элемент объявления,
@@ -190,4 +195,31 @@ var renderCard = function (info) {
   return mapCard;
 };
 
-renderCard(generateOffer(0));
+// renderCard(generateOffer(0));
+
+// module 4
+
+// создадим функцию которая при событии MouseUp создаст пины итд
+var onMainPinMouseUp = function () {
+  map.classList.remove('map--faded');
+  createPins(allOffers);
+  var noticeForm = document.querySelector('.notice__form');
+  noticeForm.classList.remove('notice__form--disabled');
+};
+
+var mapPinMain = document.querySelector('.map__pin--main');
+mapPinMain.addEventListener('mouseup', onMainPinMouseUp);
+
+
+var onPinClick = function (evt, offer) {
+  var mapPin = map.querySelector('.map__pin:not(.map__pin--main)');
+  mapPin.classList.add('map__pin--active');
+  renderCard(offer);
+};
+
+// При нажатии на любой из элементов .map__pin ему должен
+// добавляться класс map__pin--active и должен показываться элемент .popup
+// Если до этого у другого элемента существовал класс pin--active,
+// то у этого элемента класс нужно убрать
+// При нажатии на элемент .popup__close карточка объявления должна скрываться.
+// При этом должен деактивироваться элемент .map__pin, который был помечен как активный
