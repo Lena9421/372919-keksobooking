@@ -140,18 +140,16 @@ var generatePin = function (offer) {
   return newPin;
 };
 
-// создадим функцию  createPins которая отрисует сгенерированные DOM элементы в блок с классом .map__pins.
+// создадим функцию  addPinToMap которая отрисует сгенерированные DOM элементы в блок с классом .map__pins.
 // Для вставки элементов используем DocumentFragment.
 var mapPins = map.querySelector('.map__pins');
-var createPins = function (array) {
+var addPinToMap = function (array) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < array.length; i++) {
     fragment.appendChild(generatePin(allOffers[i]));
   }
   mapPins.appendChild(fragment);
 };
-
-// createPins(allOffers);
 
 // На основе первого по порядку элемента из сгенерированного массива и шаблона template article.map__card
 // создадим DOM-элемент объявления,
@@ -168,7 +166,6 @@ var getFeatureElement = function (featureElement) {
   liFragment.appendChild(newElement);
   return liFragment;
 };
-
 
 var getCard = function (info) {
   var template = document.querySelector('template');
@@ -202,16 +199,27 @@ var getCard = function (info) {
     var activePin = document.querySelector('.map__pin--active');
     activePin.classList.remove('map__pin--active'); // удаляем этот класс
   };
+  popUpClose.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === 13) {
+      offerCard.classList.add('hidden');
+      var activePin = document.querySelector('.map__pin--active');
+      activePin.classList.remove('map__pin--active'); // удаляем этот класс
+    }
+  });
+  document.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === 27) {
+      offerCard.classList.add('hidden');
+    }
+  });
   // возвращаем заполненнкую ноду
   return offerCard;
 };
-
 // module 4
 
 // создадим функцию которая при событии MouseUp создаст пины итд
 var onMainPinMouseUp = function () {
   map.classList.remove('map--faded');
-  createPins(allOffers);
+  addPinToMap(allOffers);
   var noticeForm = document.querySelector('.notice__form');
   noticeForm.classList.remove('notice__form--disabled');
 };
@@ -231,15 +239,12 @@ var onPinClick = function (evt, offer) {
   // и ее результат вставляем в блок map перед классом '.map__filters-container'
   map.insertBefore(getCard(offer), document.querySelector('.map__filters-container'));
 };
-
-// Добавить обработчики для альтернативного ввода с клавиатуры keydown для кнопок открытия/закрытия объявлений:
-
-// Если пин объявления в фокусе .map__pin,
-// то диалог с подробностями должен показываться по нажатию кнопки ENTER
-
 // Когда диалог открыт, то клавиша ESC должна закрывать диалог
 // и деактивировать элемент .map__pin, который был помечен как активный
 
-// Если диалог открыт и фокус находится на крестике,
-// то нажатие клавиши ENTER приводит к закрытию диалога и деактивации элемента
-// .map__pin, который был помечен как активный
+document.addEventListener('keydown', function (evt) {
+  var popup = document.querySelector('.map__card');
+  if (evt.keyCode === 27) {
+    popup.classList.add('hidden');
+  }
+});
