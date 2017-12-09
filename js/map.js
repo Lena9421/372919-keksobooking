@@ -127,9 +127,7 @@ var map = document.querySelector('.map');
 // создадим функцию генерации пинов
 // в переменную  newPin  клонируем выбранный DOM элемент с классом .map__pin
 // стилизуем элементы клонированной DOM ноды
-// var mapPinExeptMain = map.querySelector('.map__pin:not(.map__pin--main)');
-
-
+// навесим хендлер на пин - при клике исполняется функция onPinClick
 var generatePin = function (offer) {
   var mapPin = document.querySelector('template').content.querySelector('.map__pin');
   var newPin = mapPin.cloneNode(true);
@@ -171,30 +169,53 @@ var getFeatureElement = function (featureElement) {
   return liFragment;
 };
 
-var renderCard = function (info) {
+
+var getCard = function (info) {
   var template = document.querySelector('template');
   var mapCard = template.content.querySelector('article.map__card');
-  var cardElement = mapCard.cloneNode(true);
-  var mapCardP = cardElement.querySelectorAll('p');
-  var ulElement = cardElement.querySelector('.popup__features');
-  cardElement.querySelector('.popup__features').textContent = '';
-  cardElement.querySelector('h3').textContent = info.offer.title;
-  cardElement.querySelector('h4').textContent = offerType[info.offer.type];
-  cardElement.querySelector('.popup__price').innerHTML = info.offer.price + '&#x20bd;/ночь';
-  cardElement.querySelector('small').textContent = info.offer.address;
-  cardElement.querySelector('.popup__avatar').setAttribute('src', info.author.avatar);
-  mapCardP[2].textContent = info.offer.rooms + ' комнаты для ' + info.offer.guests + ' гостей';
-  mapCardP[3].textContent = 'Заезд после ' + info.offer.checkin + ', выезд до ' + info.offer.checkout;
-  map.insertBefore(cardElement, document.querySelector('map__filters-container'));
-  var features = getRandomFeatures(OfferInfo.FEATURES, randomArrayLength);
-  for (var i = 0; i < features.length; i++) {
-    var element = getFeatureElement(features[i]);
+  var offerCard = mapCard.cloneNode(true);
+  var popUpClose = offerCard.querySelector('.popup__close');
+  var cardElementP = offerCard.querySelectorAll('p');
+  var ulElement = offerCard.querySelector('.popup__features');
+  offerCard.querySelector('.popup__features').textContent = '';
+  offerCard.querySelector('h3').textContent = info.offer.title;
+  offerCard.querySelector('h4').textContent = offerType[info.offer.type];
+  offerCard.querySelector('.popup__price').innerHTML = info.offer.price + '&#x20bd;/ночь';
+  offerCard.querySelector('small').textContent = info.offer.address;
+  offerCard.querySelector('.popup__avatar').setAttribute('src', info.author.avatar);
+  cardElementP[2].textContent = info.offer.rooms + ' комнаты для ' + info.offer.guests + ' гостей';
+  cardElementP[3].textContent = 'Заезд после ' + info.offer.checkin + ', выезд до ' + info.offer.checkout;
+  var featuresList = getRandomFeatures(OfferInfo.FEATURES, randomArrayLength);
+  for (var i = 0; i < featuresList.length; i++) {
+    var element = getFeatureElement(featuresList[i]);
     ulElement.appendChild(element);
   }
-  mapCardP[4].textContent = info.offer.description;
-  return mapCard;
+  cardElementP[4].textContent = info.offer.description;
+  // вешаем Listener на событие клика по кнопке закрытия
+  popUpClose.addEventListener('click', function (evt) {
+    onCloseClick(evt);
+  });
+  // функция которая добавляет класс hidden к ноде
+  // и вызывается при щелчке на кнопку закрытия
+  var onCloseClick = function () {
+    offerCard.classList.add('hidden');
+    var activePin = document.querySelector('.map__pin--active');
+    activePin.classList.remove('map__pin--active'); // удаляем этот класс
+  };
+  // возвращаем заполненнкую ноду
+  return offerCard;
 };
+// var onCloseClick = function (evt) {
+//   var mapCard = document.querySelector('.map__card');
+//   mapCard.classList.add('hidden');
+// };
 
+// var popUpClose = offerCard.querySelector('.popup__close');
+// popUpClose.removeEventListener('click', function () {
+//   onPinClick();
+// });
+// function () {
+//   mapCard.classList.add('hidden');
 // renderCard(generateOffer(0));
 
 // module 4
@@ -210,16 +231,27 @@ var onMainPinMouseUp = function () {
 var mapPinMain = document.querySelector('.map__pin--main');
 mapPinMain.addEventListener('mouseup', onMainPinMouseUp);
 
-
-var onPinClick = function (evt, offer) {
-  var mapPin = map.querySelector('.map__pin:not(.map__pin--main)');
-  mapPin.classList.add('map__pin--active');
-  renderCard(offer);
-};
-
-// При нажатии на любой из элементов .map__pin ему должен
-// добавляться класс map__pin--active и должен показываться элемент .popup
 // Если до этого у другого элемента существовал класс pin--active,
 // то у этого элемента класс нужно убрать
-// При нажатии на элемент .popup__close карточка объявления должна скрываться.
-// При этом должен деактивироваться элемент .map__pin, который был помечен как активный
+var onPinClick = function (evt, offer) {
+  var activePin = document.querySelector('.map__pin--active');
+  if (activePin) { // если в переменной лежит значение с классом .map__pin--active
+    activePin.classList.remove('map__pin--active'); // удаляем этот класс
+  }
+  evt.currentTarget.classList.add('map__pin--active'); // иначе добавляем класс
+  // вызываем функцию getCard(offer)
+  // и ее результат вставляем в блок map перед классом '.map__filters-container'
+  map.insertBefore(getCard(offer), document.querySelector('.map__filters-container'));
+};
+
+// Добавить обработчики для альтернативного ввода с клавиатуры keydown для кнопок открытия/закрытия объявлений:
+
+// Если пин объявления в фокусе .map__pin,
+// то диалог с подробностями должен показываться по нажатию кнопки ENTER
+
+// Когда диалог открыт, то клавиша ESC должна закрывать диалог
+// и деактивировать элемент .map__pin, который был помечен как активный
+
+// Если диалог открыт и фокус находится на крестике,
+// то нажатие клавиши ENTER приводит к закрытию диалога и деактивации элемента
+// .map__pin, который был помечен как активный
