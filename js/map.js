@@ -205,18 +205,6 @@ var getCard = function (info) {
   // возвращаем заполненнкую ноду
   return offerCard;
 };
-// var onCloseClick = function (evt) {
-//   var mapCard = document.querySelector('.map__card');
-//   mapCard.classList.add('hidden');
-// };
-
-// var popUpClose = offerCard.querySelector('.popup__close');
-// popUpClose.removeEventListener('click', function () {
-//   onPinClick();
-// });
-// function () {
-//   mapCard.classList.add('hidden');
-// renderCard(generateOffer(0));
 
 // module 4
 
