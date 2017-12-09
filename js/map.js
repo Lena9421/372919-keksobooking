@@ -209,6 +209,8 @@ var getCard = function (info) {
   document.addEventListener('keydown', function (evt) {
     if (evt.keyCode === 27) {
       offerCard.classList.add('hidden');
+      var activePin = document.querySelector('.map__pin--active');
+      activePin.classList.remove('map__pin--active'); // удаляем этот класс
     }
   });
   // возвращаем заполненнкую ноду
