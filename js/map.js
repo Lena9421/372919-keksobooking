@@ -188,24 +188,17 @@ var getCard = function (info) {
     ulElement.appendChild(element);
   }
   cardElementP[4].textContent = info.offer.description;
-
   var onCloseClick = function () {
-    offerCard.classList.add('hidden');
+    offerCard.remove();
     removeActiveClass();
   };
   var onCloseEnter = function (evt) {
     if (evt.keyCode === 13) {
-      offerCard.classList.add('hidden');
+      offerCard.remove();
       removeActiveClass();
     }
   };
-  var keyDownEscape = function (evt) {
-    if (evt.keyCode === 27) {
-      offerCard.classList.add('hidden');
-      removeActiveClass();
-    }
-  };
-  // вешаем листенеры на события
+  // вешаем листенеры на  popUpClose
   popUpClose.addEventListener('click', onCloseClick);
   popUpClose.addEventListener('keydown', onCloseEnter);
   // возвращаем заполненнкую ноду
@@ -219,7 +212,7 @@ var removeActiveClass = function () {
 var keyDownEscape = function (evt) {
   if (evt.keyCode === 27) {
     var offerCard = document.querySelector('.offerCard');
-    offerCard.classList.add('hidden');
+    map.removeChild(offerCard);
     removeActiveClass();
   }
 };
@@ -242,10 +235,14 @@ mapPinMain.addEventListener('mouseup', onMainPinMouseUp);
 // то у этого элемента класс нужно убрать
 var onPinClick = function (evt, offer) {
   var activePin = document.querySelector('.map__pin--active');
-  if (activePin) { // если в переменной лежит значение с классом .map__pin--active
-    activePin.classList.remove('map__pin--active'); // удаляем этот класс
+  var offerCard = document.querySelector('.map__card');
+  if (activePin) {
+    activePin.classList.remove('map__pin--active');
   }
   evt.currentTarget.classList.add('map__pin--active'); // иначе добавляем класс
+  if (offerCard) {
+    offerCard.remove();
+  }
   // вызываем функцию getCard(offer)
   // и ее результат вставляем в блок map перед классом '.map__filters-container'
   map.insertBefore(getCard(offer), document.querySelector('.map__filters-container'));
