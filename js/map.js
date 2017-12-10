@@ -54,9 +54,10 @@ var getRandomElement = function (array) {
 var getRandomInteger = function (min, max) {
   return (Math.random() * (max - min)) + min;
 };
-
+// создадим переменную для хранения результата выполнения функции.
+// Результат - случайная длинна массива в диапазоне от 1 до длины массива с OfferInfo.features
 var randomArrayLength = getRandomInteger(1, OfferInfo.FEATURES.length);
-// создадим функцию для генерации массива случайной длины
+// создадим функцию для генерации массива случайной длины фич
 var getRandomFeatures = function (arr, arraylength) {
   var randomFeatures = [];
   var arrcopy = arr.slice();
@@ -98,7 +99,7 @@ var generateOffer = function (i) {
       'description': '',
       'photos': []
     },
-    'Location': {
+    'location': {
       x: locationX,
       y: locationY
     }
@@ -121,34 +122,34 @@ var allOffers = getOffersArray(offersCount);
 // создадим переменную, которая выбирает дом элемент с классом .map
 var map = document.querySelector('.map');
 // у блока сложенного в переменную map удалим класс   map--faded
-map.classList.remove('map--faded');
+// map.classList.remove('map--faded');
 
 // создадим функцию генерации пинов
 // в переменную  newPin  клонируем выбранный DOM элемент с классом .map__pin
 // стилизуем элементы клонированной DOM ноды
-var generatePin = function (info) {
+// навесим хендлер на пин - при клике исполняется функция onPinClick
+var generatePin = function (offer) {
   var mapPin = document.querySelector('template').content.querySelector('.map__pin');
   var newPin = mapPin.cloneNode(true);
-  newPin.style.left = info.Location.x + 'px';
-  newPin.style.top = info.Location.y + 'px';
-  newPin.querySelector('img').src = info.author.avatar;
+  newPin.style.left = offer.location.x + 'px';
+  newPin.style.top = offer.location.y + 'px';
+  newPin.querySelector('img').src = offer.author.avatar;
+  newPin.addEventListener('click', function (evt) {
+    onPinClick(evt, offer);
+  });
   return newPin;
 };
 
-generatePin(generateOffer(offersCount));
-
-// создадим функцию  createPins которая отрисует сгенерированные DOM элементы в блок с классом .map__pins.
+// создадим функцию  addPinsToMap которая отрисует сгенерированные DOM элементы в блок с классом .map__pins.
 // Для вставки элементов используем DocumentFragment.
 var mapPins = map.querySelector('.map__pins');
-var createPins = function (array) {
+var addPinsToMap = function (array) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < array.length; i++) {
     fragment.appendChild(generatePin(allOffers[i]));
   }
   mapPins.appendChild(fragment);
 };
-
-createPins(allOffers);
 
 // На основе первого по порядку элемента из сгенерированного массива и шаблона template article.map__card
 // создадим DOM-элемент объявления,
@@ -166,28 +167,83 @@ var getFeatureElement = function (featureElement) {
   return liFragment;
 };
 
-var renderCard = function (info) {
+var getCard = function (info) {
   var template = document.querySelector('template');
   var mapCard = template.content.querySelector('article.map__card');
-  var cardElement = mapCard.cloneNode(true);
-  var mapCardP = cardElement.querySelectorAll('p');
-  var ulElement = cardElement.querySelector('.popup__features');
-  cardElement.querySelector('.popup__features').textContent = '';
-  cardElement.querySelector('h3').textContent = info.offer.title;
-  cardElement.querySelector('h4').textContent = offerType[info.offer.type];
-  cardElement.querySelector('.popup__price').innerHTML = info.offer.price + '&#x20bd;/ночь';
-  cardElement.querySelector('small').textContent = info.offer.address;
-  cardElement.querySelector('.popup__avatar').setAttribute('src', info.author.avatar);
-  mapCardP[2].textContent = info.offer.rooms + ' комнаты для ' + info.offer.guests + ' гостей';
-  mapCardP[3].textContent = 'Заезд после ' + info.offer.checkin + ', выезд до ' + info.offer.checkout;
-  map.insertBefore(cardElement, document.querySelector('map__filters-container'));
-  var features = getRandomFeatures(OfferInfo.FEATURES, randomArrayLength);
-  for (var i = 0; i < features.length; i++) {
-    var element = getFeatureElement(features[i]);
+  var offerCard = mapCard.cloneNode(true);
+  var popUpClose = offerCard.querySelector('.popup__close');
+  var cardElementP = offerCard.querySelectorAll('p');
+  var ulElement = offerCard.querySelector('.popup__features');
+  offerCard.querySelector('.popup__features').textContent = '';
+  offerCard.querySelector('h3').textContent = info.offer.title;
+  offerCard.querySelector('h4').textContent = offerType[info.offer.type];
+  offerCard.querySelector('.popup__price').innerHTML = info.offer.price + '&#x20bd;/ночь';
+  offerCard.querySelector('small').textContent = info.offer.address;
+  offerCard.querySelector('.popup__avatar').setAttribute('src', info.author.avatar);
+  cardElementP[2].textContent = info.offer.rooms + ' комнаты для ' + info.offer.guests + ' гостей';
+  cardElementP[3].textContent = 'Заезд после ' + info.offer.checkin + ', выезд до ' + info.offer.checkout;
+  var featuresList = getRandomFeatures(OfferInfo.FEATURES, randomArrayLength);
+  for (var i = 0; i < featuresList.length; i++) {
+    var element = getFeatureElement(featuresList[i]);
     ulElement.appendChild(element);
   }
-  mapCardP[4].textContent = info.offer.description;
-  return mapCard;
+  cardElementP[4].textContent = info.offer.description;
+  var onCloseClick = function () {
+    map.removeChild(offerCard);
+    removeActiveClass();
+  };
+  var onCloseEnter = function (evt) {
+    if (evt.keyCode === 13) {
+      map.removeChild(offerCard);
+      removeActiveClass();
+    }
+  };
+  // вешаем листенеры на  popUpClose
+  popUpClose.addEventListener('click', onCloseClick);
+  popUpClose.addEventListener('keydown', onCloseEnter);
+  // возвращаем заполненнкую ноду
+  return offerCard;
 };
 
-renderCard(generateOffer(0));
+var removeActiveClass = function () {
+  var activePin = document.querySelector('.map__pin--active');
+  activePin.classList.remove('map__pin--active'); // удаляем этот класс
+};
+var keyDownEscape = function (evt) {
+  if (evt.keyCode === 27) {
+    var offerCard = document.querySelector('.map__card');
+    map.removeChild(offerCard);
+    removeActiveClass();
+  }
+};
+document.addEventListener('keydown', keyDownEscape);
+
+// module 4
+
+// создадим функцию которая при событии MouseUp создаст пины итд
+var noticeForm = document.querySelector('.notice__form');
+var onMainPinMouseUp = function () {
+  map.classList.remove('map--faded');
+  addPinsToMap(allOffers);
+  noticeForm.classList.remove('notice__form--disabled');
+};
+
+var mapPinMain = document.querySelector('.map__pin--main');
+mapPinMain.addEventListener('mouseup', onMainPinMouseUp);
+
+// Если до этого у другого элемента существовал класс pin--active,
+// то у этого элемента класс нужно убрать
+var onPinClick = function (evt, offer) {
+  var activePin = document.querySelector('.map__pin--active');
+  var offerCard = document.querySelector('.map__card');
+  if (activePin) {
+    activePin.classList.remove('map__pin--active');
+  }
+  evt.currentTarget.classList.add('map__pin--active'); // иначе добавляем класс
+  if (offerCard) {
+    map.removeChild(offerCard);
+  }
+  // вызываем функцию getCard(offer)
+  // и ее результат вставляем в блок map перед классом '.map__filters-container'
+  map.insertBefore(getCard(offer), document.querySelector('.map__filters-container'));
+};
