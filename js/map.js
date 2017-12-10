@@ -99,7 +99,7 @@ var generateOffer = function (i) {
       'description': '',
       'photos': []
     },
-    'Location': {
+    'location': {
       x: locationX,
       y: locationY
     }
@@ -131,8 +131,8 @@ var map = document.querySelector('.map');
 var generatePin = function (offer) {
   var mapPin = document.querySelector('template').content.querySelector('.map__pin');
   var newPin = mapPin.cloneNode(true);
-  newPin.style.left = offer.Location.x + 'px';
-  newPin.style.top = offer.Location.y + 'px';
+  newPin.style.left = offer.location.x + 'px';
+  newPin.style.top = offer.location.y + 'px';
   newPin.querySelector('img').src = offer.author.avatar;
   newPin.addEventListener('click', function (evt) {
     onPinClick(evt, offer);
@@ -188,10 +188,7 @@ var getCard = function (info) {
     ulElement.appendChild(element);
   }
   cardElementP[4].textContent = info.offer.description;
-  var removeActiveClass = function () {
-    var activePin = document.querySelector('.map__pin--active');
-    activePin.classList.remove('map__pin--active'); // удаляем этот класс
-  };
+
   var onCloseClick = function () {
     offerCard.classList.add('hidden');
     removeActiveClass();
@@ -211,10 +208,23 @@ var getCard = function (info) {
   // вешаем листенеры на события
   popUpClose.addEventListener('click', onCloseClick);
   popUpClose.addEventListener('keydown', onCloseEnter);
-  document.addEventListener('keydown', keyDownEscape);
   // возвращаем заполненнкую ноду
   return offerCard;
 };
+
+var removeActiveClass = function () {
+  var activePin = document.querySelector('.map__pin--active');
+  activePin.classList.remove('map__pin--active'); // удаляем этот класс
+};
+var keyDownEscape = function (evt) {
+  if (evt.keyCode === 27) {
+    var offerCard = document.querySelector('.offerCard');
+    offerCard.classList.add('hidden');
+    removeActiveClass();
+  }
+};
+document.addEventListener('keydown', keyDownEscape);
+
 // module 4
 
 // создадим функцию которая при событии MouseUp создаст пины итд
