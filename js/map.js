@@ -189,12 +189,12 @@ var getCard = function (info) {
   }
   cardElementP[4].textContent = info.offer.description;
   var onCloseClick = function () {
-    offerCard.remove();
+    map.removeChild(offerCard);
     removeActiveClass();
   };
   var onCloseEnter = function (evt) {
     if (evt.keyCode === 13) {
-      offerCard.remove();
+      map.removeChild(offerCard);
       removeActiveClass();
     }
   };
@@ -211,7 +211,7 @@ var removeActiveClass = function () {
 };
 var keyDownEscape = function (evt) {
   if (evt.keyCode === 27) {
-    var offerCard = document.querySelector('.offerCard');
+    var offerCard = document.querySelector('.map__card');
     map.removeChild(offerCard);
     removeActiveClass();
   }
@@ -241,7 +241,7 @@ var onPinClick = function (evt, offer) {
   }
   evt.currentTarget.classList.add('map__pin--active'); // иначе добавляем класс
   if (offerCard) {
-    offerCard.remove();
+    map.removeChild(offerCard);
   }
   // вызываем функцию getCard(offer)
   // и ее результат вставляем в блок map перед классом '.map__filters-container'
