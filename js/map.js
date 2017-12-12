@@ -205,6 +205,7 @@ var getCard = function (info) {
   return offerCard;
 };
 
+// module4-task1
 var removeActiveClass = function () {
   var activePin = document.querySelector('.map__pin--active');
   activePin.classList.remove('map__pin--active'); // удаляем этот класс
@@ -217,8 +218,6 @@ var keyDownEscape = function (evt) {
   }
 };
 document.addEventListener('keydown', keyDownEscape);
-
-// module 4
 
 // создадим функцию которая при событии MouseUp создаст пины итд
 var noticeForm = document.querySelector('.notice__form');
@@ -247,3 +246,44 @@ var onPinClick = function (evt, offer) {
   // и ее результат вставляем в блок map перед классом '.map__filters-container'
   map.insertBefore(getCard(offer), document.querySelector('.map__filters-container'));
 };
+// module4-task2 Валидация
+
+// Поля «время заезда» и «время выезда» синхронизированы.
+// При изменении одного из полей, значение второго автоматически выставляется точно таким же
+// — например, если время заезда указано «после 14», то время выезда будет равно «до 14»
+var timeinSelect = document.getElementById('timein');
+var timeoutSelect = document.getElementById('timeout');
+
+// нужно приравнять значение timeout к значению выбранной опции в timein
+var equateInOutTime = function () {
+  timeoutSelect.value = timeinSelect.value;
+};
+var equateOutInTime = function () {
+  timeinSelect.value = timeoutSelect.value;
+};
+timeinSelect.addEventListener('change', equateInOutTime);
+timeoutSelect.addEventListener('change', equateOutInTime);
+
+// Значение поля «Тип жилья» синхронизировано с минимальной ценой следующим образом:
+//   «Лачуга» — минимальная цена 0
+// «Квартира» — минимальная цена 1000
+// «Дом» — минимальная цена 5000
+// «Дворец» — минимальная цена 10000
+
+// находим элементы в документе
+var typeOfApartment = document.getElementById('type');
+var minPriceOfAp = document.getElementById('price');
+
+// соответствие значения вида апартаментов и минимальной цены
+var myMap = {
+  'bungalo': 0,
+  'flat': 1000,
+  'house': 5000,
+  'palace': 10000
+};
+// функция
+var syncTypeAndMinPrice = function () {
+  myMap[typeOfApartment.value] = minPriceOfAp.min;
+};
+// вызов функции при изменении typeOfApartment
+typeOfApartment.addEventListener('change', syncTypeAndMinPrice);
