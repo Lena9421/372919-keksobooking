@@ -121,8 +121,6 @@ var allOffers = getOffersArray(offersCount);
 
 // создадим переменную, которая выбирает дом элемент с классом .map
 var map = document.querySelector('.map');
-// у блока сложенного в переменную map удалим класс   map--faded
-// map.classList.remove('map--faded');
 
 // создадим функцию генерации пинов
 // в переменную  newPin  клонируем выбранный DOM элемент с классом .map__pin
@@ -156,8 +154,6 @@ var addPinsToMap = function (array) {
 // заполним его данными из объекта
 // и вставим полученный DOM-элемент в блок .map
 // перед блоком .map__filters-container
-// В список .popup__features выведите все доступные удобства в квартире из массива {{offer.features}}
-// пустыми элементами списка (<li>) с классом feature feature--{{название удобства}}
 
 var getFeatureElement = function (featureElement) {
   var liFragment = document.createDocumentFragment();
@@ -221,10 +217,13 @@ document.addEventListener('keydown', keyDownEscape);
 
 // создадим функцию которая при событии MouseUp создаст пины итд
 var noticeForm = document.querySelector('.notice__form');
+var formElement = noticeForm.querySelectorAll('.form__element');
+
 var onMainPinMouseUp = function () {
   map.classList.remove('map--faded');
   addPinsToMap(allOffers);
   noticeForm.classList.remove('notice__form--disabled');
+  formElement.removeAttribute('disabled');
 };
 
 var mapPinMain = document.querySelector('.map__pin--main');
@@ -264,12 +263,7 @@ var equateOutInTime = function () {
 timeinSelect.addEventListener('change', equateInOutTime);
 timeoutSelect.addEventListener('change', equateOutInTime);
 
-// Значение поля «Тип жилья» синхронизировано с минимальной ценой следующим образом:
-//   «Лачуга» — минимальная цена 0
-// «Квартира» — минимальная цена 1000
-// «Дом» — минимальная цена 5000
-// «Дворец» — минимальная цена 10000
-
+// Значение поля «Тип жилья» синхронизировано с минимальной ценой:
 // находим элементы в документе
 var typeOfApartment = document.getElementById('type');
 var minPriceOfAp = document.getElementById('price');
@@ -281,9 +275,41 @@ var myMap = {
   'house': 5000,
   'palace': 10000
 };
-// функция
+// функция приравнивающая значение минимальной цены
+// соответствующей типу жилья к атрибуту min для селекта #price
 var syncTypeAndMinPrice = function () {
   myMap[typeOfApartment.value] = minPriceOfAp.min;
 };
-// вызов функции при изменении typeOfApartment
+// обработчик события для typeOfApartment
 typeOfApartment.addEventListener('change', syncTypeAndMinPrice);
+
+// Количество комнат связано с количеством гостей:
+// 1 комната — «для одного гостя»
+// 2 комнаты — «для 2-х или 1-го гостя»
+// 3 комнаты — «для 2-х, 1-го или 3-х гостей»
+// 100 комнат — «не для гостей»
+
+// находим селекты в документе
+var numberOfRooms = document.querySelector('#room_number');
+var capacity = document.querySelector('#capacity');
+var capacityOptions = capacity.querySelectorAll('option');
+// слева ключ справа значения
+// ответ - нужный массив
+var roomToGuest = {
+  '1': ['1'],
+  '2': ['1', '2'],
+  '3': ['1', '2', '3'],
+  '100': ['0']
+};
+
+var sincRoomAndGuests = function () {
+  var capacityValues = roomToGuest[numberOfRooms.value];
+  capacityOptions.forEach(function (item) { // запускаем цикл по массиву capacityOptions(2-й селект)
+    // Если значение в поле value у option есть в массиве,
+    // то не добавляем disabled, если нет — добавляем
+    item.disabled = !capacityValues.includes(item.value);
+  });
+  capacity.value = capacityValues[0];
+};
+// вешаем  обработчик на numberOfRooms
+numberOfRooms.addEventListener('change', sincRoomAndGuests);
