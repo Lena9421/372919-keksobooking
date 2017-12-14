@@ -223,7 +223,9 @@ var onMainPinMouseUp = function () {
   map.classList.remove('map--faded');
   addPinsToMap(allOffers);
   noticeForm.classList.remove('notice__form--disabled');
-  // formElements.removeAttribute('disabled');
+  formElements.forEach(function (item) {
+    item.removeAttribute('disabled');
+  });
 };
 
 var mapPinMain = document.querySelector('.map__pin--main');
@@ -279,8 +281,7 @@ var typeToPrice = {
 // соответствующей типу жилья к атрибуту min для селекта #price
 
 var syncTypeAndMinPrice = function () {
-  var minPrice = typeToPrice[typeOfApartment.value];
-  minPriceOfAp.min = minPrice;
+  minPriceOfAp.min = typeToPrice[typeOfApartment.value];
 };
 
 // обработчик события для typeOfApartment
