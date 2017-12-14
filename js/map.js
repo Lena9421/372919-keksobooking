@@ -217,13 +217,13 @@ document.addEventListener('keydown', keyDownEscape);
 
 // создадим функцию которая при событии MouseUp создаст пины итд
 var noticeForm = document.querySelector('.notice__form');
-var formElement = noticeForm.querySelectorAll('.form__element');
+var formElements = noticeForm.querySelectorAll('.form__element');
 
 var onMainPinMouseUp = function () {
   map.classList.remove('map--faded');
   addPinsToMap(allOffers);
   noticeForm.classList.remove('notice__form--disabled');
-  formElement.removeAttribute('disabled');
+  // formElements.removeAttribute('disabled');
 };
 
 var mapPinMain = document.querySelector('.map__pin--main');
@@ -250,8 +250,8 @@ var onPinClick = function (evt, offer) {
 // Поля «время заезда» и «время выезда» синхронизированы.
 // При изменении одного из полей, значение второго автоматически выставляется точно таким же
 // — например, если время заезда указано «после 14», то время выезда будет равно «до 14»
-var timeinSelect = document.getElementById('timein');
-var timeoutSelect = document.getElementById('timeout');
+var timeinSelect = document.querySelector('#timein');
+var timeoutSelect = document.querySelector('#timeout');
 
 // нужно приравнять значение timeout к значению выбранной опции в timein
 var equateInOutTime = function () {
@@ -269,7 +269,7 @@ var typeOfApartment = document.getElementById('type');
 var minPriceOfAp = document.getElementById('price');
 
 // соответствие значения вида апартаментов и минимальной цены
-var myMap = {
+var typeToPrice = {
   'bungalo': 0,
   'flat': 1000,
   'house': 5000,
@@ -277,23 +277,21 @@ var myMap = {
 };
 // функция приравнивающая значение минимальной цены
 // соответствующей типу жилья к атрибуту min для селекта #price
+
 var syncTypeAndMinPrice = function () {
-  myMap[typeOfApartment.value] = minPriceOfAp.min;
+  var minPrice = typeToPrice[typeOfApartment.value];
+  minPriceOfAp.min = minPrice;
 };
+
 // обработчик события для typeOfApartment
 typeOfApartment.addEventListener('change', syncTypeAndMinPrice);
 
 // Количество комнат связано с количеством гостей:
-// 1 комната — «для одного гостя»
-// 2 комнаты — «для 2-х или 1-го гостя»
-// 3 комнаты — «для 2-х, 1-го или 3-х гостей»
-// 100 комнат — «не для гостей»
-
 // находим селекты в документе
 var numberOfRooms = document.querySelector('#room_number');
 var capacity = document.querySelector('#capacity');
 var capacityOptions = capacity.querySelectorAll('option');
-// слева ключ справа значения
+// слева ключ, справа значения
 // ответ - нужный массив
 var roomToGuest = {
   '1': ['1'],
