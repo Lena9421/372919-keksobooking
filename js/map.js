@@ -121,8 +121,6 @@ var allOffers = getOffersArray(offersCount);
 
 // создадим переменную, которая выбирает дом элемент с классом .map
 var map = document.querySelector('.map');
-// у блока сложенного в переменную map удалим класс   map--faded
-// map.classList.remove('map--faded');
 
 // создадим функцию генерации пинов
 // в переменную  newPin  клонируем выбранный DOM элемент с классом .map__pin
@@ -150,14 +148,6 @@ var addPinsToMap = function (array) {
   }
   mapPins.appendChild(fragment);
 };
-
-// На основе первого по порядку элемента из сгенерированного массива и шаблона template article.map__card
-// создадим DOM-элемент объявления,
-// заполним его данными из объекта
-// и вставим полученный DOM-элемент в блок .map
-// перед блоком .map__filters-container
-// В список .popup__features выведите все доступные удобства в квартире из массива {{offer.features}}
-// пустыми элементами списка (<li>) с классом feature feature--{{название удобства}}
 
 var getFeatureElement = function (featureElement) {
   var liFragment = document.createDocumentFragment();
@@ -205,6 +195,7 @@ var getCard = function (info) {
   return offerCard;
 };
 
+// module4-task1
 var removeActiveClass = function () {
   var activePin = document.querySelector('.map__pin--active');
   activePin.classList.remove('map__pin--active'); // удаляем этот класс
@@ -218,14 +209,17 @@ var keyDownEscape = function (evt) {
 };
 document.addEventListener('keydown', keyDownEscape);
 
-// module 4
-
 // создадим функцию которая при событии MouseUp создаст пины итд
 var noticeForm = document.querySelector('.notice__form');
+var formElements = noticeForm.querySelectorAll('.form__element');
+
 var onMainPinMouseUp = function () {
   map.classList.remove('map--faded');
   addPinsToMap(allOffers);
   noticeForm.classList.remove('notice__form--disabled');
+  formElements.forEach(function (item) {
+    item.removeAttribute('disabled');
+  });
 };
 
 var mapPinMain = document.querySelector('.map__pin--main');
@@ -247,3 +241,75 @@ var onPinClick = function (evt, offer) {
   // и ее результат вставляем в блок map перед классом '.map__filters-container'
   map.insertBefore(getCard(offer), document.querySelector('.map__filters-container'));
 };
+// module4-task2 Валидация
+
+// Поля «время заезда» и «время выезда» синхронизированы.
+var timeinSelect = document.querySelector('#timein');
+var timeoutSelect = document.querySelector('#timeout');
+
+// нужно присвоить значение timeout к значению выбранной опции в timein
+var equateInOutTime = function () {
+  timeoutSelect.value = timeinSelect.value;
+};
+var equateOutInTime = function () {
+  timeinSelect.value = timeoutSelect.value;
+};
+timeinSelect.addEventListener('change', equateInOutTime);
+timeoutSelect.addEventListener('change', equateOutInTime);
+
+// Значение поля «Тип жилья» синхронизировано с минимальной ценой:
+// находим элементы в документе
+var typeOfApartment = document.getElementById('type');
+var minPriceOfAp = document.getElementById('price');
+
+// соответствие значения вида апартаментов и минимальной цены
+var typeToPrice = {
+  'bungalo': 0,
+  'flat': 1000,
+  'house': 5000,
+  'palace': 10000
+};
+// функция приравнивающая значение минимальной цены
+// соответствующей типу жилья к атрибуту min для селекта #price
+
+var syncTypeAndMinPrice = function () {
+  minPriceOfAp.min = typeToPrice[typeOfApartment.value];
+};
+
+// обработчик события для typeOfApartment
+typeOfApartment.addEventListener('change', syncTypeAndMinPrice);
+
+// Количество комнат связано с количеством гостей:
+// находим селекты в документе
+var numberOfRooms = document.querySelector('#room_number');
+var capacity = document.querySelector('#capacity');
+var capacityOptions = capacity.querySelectorAll('option');
+// слева ключ, справа значения
+// ответ - нужный массив
+var roomToGuest = {
+  '1': ['1'],
+  '2': ['1', '2'],
+  '3': ['1', '2', '3'],
+  '100': ['0']
+};
+
+var sincRoomAndGuests = function () {
+  var capacityValues = roomToGuest[numberOfRooms.value];
+  capacityOptions.forEach(function (item) { // запускаем цикл по массиву capacityOptions(2-й селект)
+    // Если значение в поле value у option есть в массиве,
+    // то не добавляем disabled, если нет — добавляем
+    item.disabled = !capacityValues.includes(item.value);
+  }); // закончился цикл
+  capacity.value = capacityValues[0];
+};
+sincRoomAndGuests();
+
+// вешаем  обработчик на numberOfRooms
+numberOfRooms.addEventListener('change', sincRoomAndGuests);
+
+// обработчик события для незаполненных полей
+noticeForm.addEventListener('invalid', function (evt) {
+  var invalidField = evt.target;
+  invalidField.style.borderColor = 'red';
+}, true);
+
