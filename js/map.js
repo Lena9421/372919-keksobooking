@@ -219,6 +219,7 @@ var onMainPinMouseUp = function () {
   noticeForm.classList.remove('notice__form--disabled');
   formElements.forEach(function (item) {
     item.removeAttribute('disabled');
+    sincRoomAndGuests();
   });
 };
 
