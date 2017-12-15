@@ -149,12 +149,6 @@ var addPinsToMap = function (array) {
   mapPins.appendChild(fragment);
 };
 
-// На основе первого по порядку элемента из сгенерированного массива и шаблона template article.map__card
-// создадим DOM-элемент объявления,
-// заполним его данными из объекта
-// и вставим полученный DOM-элемент в блок .map
-// перед блоком .map__filters-container
-
 var getFeatureElement = function (featureElement) {
   var liFragment = document.createDocumentFragment();
   var newElement = document.createElement('li');
@@ -250,12 +244,10 @@ var onPinClick = function (evt, offer) {
 // module4-task2 Валидация
 
 // Поля «время заезда» и «время выезда» синхронизированы.
-// При изменении одного из полей, значение второго автоматически выставляется точно таким же
-// — например, если время заезда указано «после 14», то время выезда будет равно «до 14»
 var timeinSelect = document.querySelector('#timein');
 var timeoutSelect = document.querySelector('#timeout');
 
-// нужно приравнять значение timeout к значению выбранной опции в timein
+// нужно присвоить значение timeout к значению выбранной опции в timein
 var equateInOutTime = function () {
   timeoutSelect.value = timeinSelect.value;
 };
@@ -307,8 +299,15 @@ var sincRoomAndGuests = function () {
     // Если значение в поле value у option есть в массиве,
     // то не добавляем disabled, если нет — добавляем
     item.disabled = !capacityValues.includes(item.value);
-  });
+  }); // закончился цикл
   capacity.value = capacityValues[0];
 };
 // вешаем  обработчик на numberOfRooms
 numberOfRooms.addEventListener('change', sincRoomAndGuests);
+
+// обработчик события для незаполненных полей
+noticeForm.addEventListener('invalid', function (evt) {
+  var invalidField = evt.target;
+  invalidField.style.borderColor = 'red';
+}, true);
+
