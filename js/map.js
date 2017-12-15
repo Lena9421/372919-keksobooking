@@ -219,7 +219,6 @@ var onMainPinMouseUp = function () {
   noticeForm.classList.remove('notice__form--disabled');
   formElements.forEach(function (item) {
     item.removeAttribute('disabled');
-    sincRoomAndGuests();
   });
 };
 
@@ -303,6 +302,8 @@ var sincRoomAndGuests = function () {
   }); // закончился цикл
   capacity.value = capacityValues[0];
 };
+sincRoomAndGuests();
+
 // вешаем  обработчик на numberOfRooms
 numberOfRooms.addEventListener('change', sincRoomAndGuests);
 
