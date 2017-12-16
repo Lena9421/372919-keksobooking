@@ -35,7 +35,7 @@ window.card = (function () {
       offerCard.querySelector('.popup__avatar').setAttribute('src', info.author.avatar);
       cardElementP[2].textContent = info.offer.rooms + ' комнаты для ' + info.offer.guests + ' гостей';
       cardElementP[3].textContent = 'Заезд после ' + info.offer.checkin + ', выезд до ' + info.offer.checkout;
-      var featuresList = window.data.getRandomFeatures(window.data.OfferInfo.FEATURES, window.randomArrayLength);
+      var featuresList = window.data.getRandomFeatures(window.data.OfferInfo.FEATURES, window.data.randomArrayLength);
       for (var i = 0; i < featuresList.length; i++) {
         var element = getFeatureElement(featuresList[i]);
         ulElement.appendChild(element);
