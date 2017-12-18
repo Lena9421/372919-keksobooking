@@ -1,5 +1,6 @@
 'use strict';
-window.data = (function () {
+(function () {
+  var offersCount = 8;
   var ImgProperties = {
     ADDRESS: 'img/avatars/user',
     PREFIX: 0,
@@ -39,30 +40,11 @@ window.data = (function () {
     Y_MAX: 500
   };
 
-  // Функция выбирающая случайный элемент из массива
-  var getRandomElement = function (array) {
-    return Math.floor(Math.random() * (array.length));
-  };
-  // Функция выбирающая случайное число в заданном диапозоне
-  var getRandomInteger = function (min, max) {
-    return (Math.random() * (max - min)) + min;
-  };
   // создадим переменную для хранения результата выполнения функции.
   // Результат - случайная длинна массива в диапазоне от 1 до длины массива с OfferInfo.features
-  var randomArrayLength = getRandomInteger(1, OfferInfo.FEATURES.length);
-  // создадим функцию для генерации массива случайной длины фич
-  var getRandomFeatures = function (arr, arraylength) {
-    var randomFeatures = [];
-    var arrcopy = arr.slice();
-    for (var i = 0; i < arraylength; i++) {
-      //  приравняем массив к выражению, в котором используется метод splice по отношению
-      // к копии масива, при чем, каждый раз вырезается рандомный элемент
-      randomFeatures[i] = arrcopy.splice(getRandomElement(arrcopy), 1) + '';
-    }
-    return randomFeatures;
-  };
+  var randomArrayLength = window.utils.getRandomInteger(1, OfferInfo.FEATURES.length);
 
-  getRandomFeatures(OfferInfo.FEATURES, randomArrayLength);
+  window.utils.getRandomFeatures(OfferInfo.FEATURES, randomArrayLength);
 
   var avatarAddress = function (numberOfArrayElement) {
     return ImgProperties.ADDRESS + ImgProperties.PREFIX + numberOfArrayElement
@@ -70,22 +52,22 @@ window.data = (function () {
   };
 
   var generateOffer = function (i) {
-    var locationX = getRandomInteger(Location.X_MIN, Location.X_MAX).toFixed();
-    var locationY = getRandomInteger(Location.Y_MIN, Location.Y_MAX).toFixed();
+    var locationX = window.utils.getRandomInteger(Location.X_MIN, Location.X_MAX).toFixed();
+    var locationY = window.utils.getRandomInteger(Location.Y_MIN, Location.Y_MAX).toFixed();
     return {
       'author': {
         'avatar': avatarAddress(i + 1)
       },
       'offer': {
-        'title': OfferInfo.TITLES[getRandomElement(OfferInfo.TITLES)],
+        'title': OfferInfo.TITLES[window.utils.getRandomElement(OfferInfo.TITLES)],
         'address': locationX + ', ' + locationY,
-        'price': getRandomInteger(OfferInfo.MIN_PRICE, OfferInfo.MAX_PRICE).toFixed(),
-        'type': OfferInfo.TYPES[getRandomElement(OfferInfo.TYPES)],
-        'rooms': getRandomInteger(OfferInfo.ROOMS_MIN, OfferInfo.ROOMS_MAX).toFixed(),
-        'guests': getRandomInteger(OfferInfo.GUESTS_MIN, OfferInfo.GUESTS_MAX).toFixed(),
-        'checkin': OfferInfo.CHECKIN[getRandomElement(OfferInfo.CHECKIN)],
-        'checkout': OfferInfo.CHECKOUT[getRandomElement(OfferInfo.CHECKOUT)],
-        'features': getRandomFeatures(OfferInfo.FEATURES, randomArrayLength),
+        'price': window.utils.getRandomInteger(OfferInfo.MIN_PRICE, OfferInfo.MAX_PRICE).toFixed(),
+        'type': OfferInfo.TYPES[window.utils.getRandomElement(OfferInfo.TYPES)],
+        'rooms': window.utils.getRandomInteger(OfferInfo.ROOMS_MIN, OfferInfo.ROOMS_MAX).toFixed(),
+        'guests': window.utils.getRandomInteger(OfferInfo.GUESTS_MIN, OfferInfo.GUESTS_MAX).toFixed(),
+        'checkin': OfferInfo.CHECKIN[window.utils.getRandomElement(OfferInfo.CHECKIN)],
+        'checkout': OfferInfo.CHECKOUT[window.utils.getRandomElement(OfferInfo.CHECKOUT)],
+        'features': window.utils.getRandomFeatures(OfferInfo.FEATURES, randomArrayLength),
         'description': '',
         'photos': []
       },
@@ -95,4 +77,20 @@ window.data = (function () {
       }
     };
   };
+
+  var getOffersArray = function (arrayLength) {
+    var offersArray = [];
+    for (var i = 0; i < arrayLength; i++) {
+      offersArray[i] = generateOffer(i);
+    }
+    return offersArray;
+  };
+  var allOffers = getOffersArray(offersCount);
+  window.data = {
+    allOffers: allOffers,
+    OfferInfoFeatures: OfferInfo.FEATURES,
+    randomArrayLength: randomArrayLength
+  };
 })();
+
+

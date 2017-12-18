@@ -1,5 +1,5 @@
 'use strict';
-window.form = (function () {
+(function () {
   var timeinSelect = document.querySelector('#timein');
   var timeoutSelect = document.querySelector('#timeout');
   var typeOfApartment = document.getElementById('type');
@@ -50,4 +50,7 @@ window.form = (function () {
     var invalidField = evt.target;
     invalidField.style.borderColor = 'red';
   }, true);
+  window.form = {
+
+  };
 })();

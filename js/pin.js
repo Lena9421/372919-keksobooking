@@ -1,6 +1,7 @@
 'use strict';
 
-window.pin = (function () {
+(function () {
+  var map = document.querySelector('.map');
   var generatePin = function (offer) {
     var mapPin = document.querySelector('template').content.querySelector('.map__pin');
     var newPin = mapPin.cloneNode(true);
@@ -25,6 +26,14 @@ window.pin = (function () {
     }
     // вызываем функцию getCard(offer)
     // и ее результат вставляем в блок map перед классом '.map__filters-container'
-    window.map.map.insertBefore(window.card.getCard(offer), document.querySelector('.map__filters-container'));
+    map.insertBefore(window.card.get(offer), document.querySelector('.map__filters-container'));
+  };
+  var removeActiveClass = function () {
+    var activePin = document.querySelector('.map__pin--active');
+    activePin.classList.remove('map__pin--active'); // удаляем этот класс
+  };
+  window.pin = {
+    generate: generatePin,
+    removeActiveClass: removeActiveClass
   };
 })();
