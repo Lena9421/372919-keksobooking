@@ -32,6 +32,13 @@
       window.pin.deactivate();
     }
   };
+  var keyDownEscape = function (evt) {
+    if (evt.keyCode === 27) {
+      var offerCard = document.querySelector('.map__card');
+      map.removeChild(offerCard);
+      window.pin.deactivate();
+    }
+  };
   var getCard = function (offer) {
     var template = document.querySelector('template');
     var mapCard = template.content.querySelector('article.map__card');
@@ -63,6 +70,7 @@
     removeCard();
     window.map.insertElement(getCard(offer));
   };
+  document.addEventListener('keydown', keyDownEscape);
 
   window.card = {
     show: showCard

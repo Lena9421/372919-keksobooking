@@ -29,17 +29,8 @@
       item.removeAttribute('disabled');
     });
   };
-
-  var keyDownEscape = function (evt) {
-    if (evt.keyCode === 27) {
-      var offerCard = document.querySelector('.map__card');
-      map.removeChild(offerCard);
-      window.pin.deactivate();
-    }
-  };
   var filtersContainer = document.querySelector('.map__filters-container');
   mapPinMain.addEventListener('mouseup', onMainPinMouseUp);
-  document.addEventListener('keydown', keyDownEscape);
 
   var insertElement = function (element) {
     map.insertBefore(element, filtersContainer);
