@@ -24,10 +24,8 @@
   var onMainPinMouseUp = function () {
     map.classList.remove('map--faded');
     addPinsToMap(allOffers);
-    window.form.noticeForm.classList.remove('notice__form--disabled');
-    window.form.formElements.forEach(function (item) {
-      item.removeAttribute('disabled');
-    });
+    window.form.activate();
+    window.form.activateElements();
   };
   var filtersContainer = document.querySelector('.map__filters-container');
   mapPinMain.addEventListener('mouseup', onMainPinMouseUp);

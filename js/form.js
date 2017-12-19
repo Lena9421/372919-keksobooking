@@ -42,6 +42,14 @@
     });
     capacity.value = capacityValues[0];
   };
+  var activateForm = function () {
+    noticeForm.classList.remove('notice__form--disabled');
+  };
+  var activateFormElements = function () {
+    formElements.forEach(function (item) {
+      item.removeAttribute('disabled');
+    });
+  };
   syncRoomAndGuests();
   numberOfRooms.addEventListener('change', syncRoomAndGuests);
   typeOfApartment.addEventListener('change', syncTypeAndMinPrice);
@@ -51,8 +59,8 @@
     var invalidField = evt.target;
     invalidField.style.borderColor = 'red';
   }, true);
-  // window.form = {
-  //   noticeForm: noticeForm,
-  //   formElements: formElements
-  // };
+  window.form = {
+    activate: activateForm,
+    activateElements: activateFormElements
+  };
 })();
