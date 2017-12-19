@@ -1,24 +1,32 @@
 'use strict';
-
 (function () {
+  var OFFERS_COUNT = 8;
   var map = document.querySelector('.map');
-  var noticeForm = document.querySelector('.notice__form');
-  var formElements = noticeForm.querySelectorAll('.form__element');
+
   var mapPinMain = document.querySelector('.map__pin--main');
+
+  var getOffersArray = function (arrayLength) {
+    var offersArray = [];
+    for (var i = 0; i < arrayLength; i++) {
+      offersArray[i] = window.data.generateOffer(i);
+    }
+    return offersArray;
+  };
+  var allOffers = getOffersArray(OFFERS_COUNT);
 
   var addPinsToMap = function (array) {
     var mapPins = map.querySelector('.map__pins');
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < array.length; i++) {
-      fragment.appendChild(window.pin.generate(window.data.allOffers[i]));
+      fragment.appendChild(window.pin.generate(allOffers[i]));
     }
     mapPins.appendChild(fragment);
   };
   var onMainPinMouseUp = function () {
     map.classList.remove('map--faded');
-    addPinsToMap(window.data.allOffers);
-    noticeForm.classList.remove('notice__form--disabled');
-    formElements.forEach(function (item) {
+    addPinsToMap(allOffers);
+    window.form.noticeForm.classList.remove('notice__form--disabled');
+    window.form.formElements.forEach(function (item) {
       item.removeAttribute('disabled');
     });
   };
@@ -30,10 +38,14 @@
       window.pin.removeActiveClass();
     }
   };
+  var filtersContainer = document.querySelector('.map__filters-container');
   mapPinMain.addEventListener('mouseup', onMainPinMouseUp);
   document.addEventListener('keydown', keyDownEscape);
 
+  var insertElement = function (element) {
+    map.insertBefore(element, filtersContainer);
+  };
   window.map = {
-    map: map
+    insertElement: insertElement
   };
 })();

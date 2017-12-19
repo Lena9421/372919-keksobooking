@@ -1,9 +1,8 @@
 'use strict';
 
 (function () {
-  var map = document.querySelector('.map');
+  var mapPin = document.querySelector('template').content.querySelector('.map__pin');
   var generatePin = function (offer) {
-    var mapPin = document.querySelector('template').content.querySelector('.map__pin');
     var newPin = mapPin.cloneNode(true);
     newPin.style.left = offer.location.x + 'px';
     newPin.style.top = offer.location.y + 'px';
@@ -16,17 +15,12 @@
 
   var onPinClick = function (evt, offer) {
     var activePin = document.querySelector('.map__pin--active');
-    var offerCard = document.querySelector('.map__card');
     if (activePin) {
-      activePin.classList.remove('map__pin--active');
+      removeActiveClass();
     }
     evt.currentTarget.classList.add('map__pin--active'); // иначе добавляем класс
-    if (offerCard) {
-      window.map.map.removeChild(offerCard);
-    }
-    // вызываем функцию getCard(offer)
-    // и ее результат вставляем в блок map перед классом '.map__filters-container'
-    map.insertBefore(window.card.get(offer), document.querySelector('.map__filters-container'));
+    // вызываем функцию отрисовки карточки
+    window.card.show(offer);
   };
   var removeActiveClass = function () {
     var activePin = document.querySelector('.map__pin--active');
@@ -34,6 +28,6 @@
   };
   window.pin = {
     generate: generatePin,
-    removeActiveClass: removeActiveClass
+    deactivate: removeActiveClass
   };
 })();

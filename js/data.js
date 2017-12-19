@@ -1,6 +1,5 @@
 'use strict';
 (function () {
-  var offersCount = 8;
   var ImgProperties = {
     ADDRESS: 'img/avatars/user',
     PREFIX: 0,
@@ -39,12 +38,17 @@
     Y_MIN: 100,
     Y_MAX: 500
   };
-
+  var offerType = {
+    flat: 'Квартира',
+    house: 'Дом',
+    bungalo: 'Бунгало',
+    palace: 'Дворец'
+  };
   // создадим переменную для хранения результата выполнения функции.
   // Результат - случайная длинна массива в диапазоне от 1 до длины массива с OfferInfo.features
   var randomArrayLength = window.utils.getRandomInteger(1, OfferInfo.FEATURES.length);
 
-  window.utils.getRandomFeatures(OfferInfo.FEATURES, randomArrayLength);
+  window.utils.getArrayWithRandomLength(OfferInfo.FEATURES, randomArrayLength);
 
   var avatarAddress = function (numberOfArrayElement) {
     return ImgProperties.ADDRESS + ImgProperties.PREFIX + numberOfArrayElement
@@ -67,7 +71,7 @@
         'guests': window.utils.getRandomInteger(OfferInfo.GUESTS_MIN, OfferInfo.GUESTS_MAX).toFixed(),
         'checkin': OfferInfo.CHECKIN[window.utils.getRandomElement(OfferInfo.CHECKIN)],
         'checkout': OfferInfo.CHECKOUT[window.utils.getRandomElement(OfferInfo.CHECKOUT)],
-        'features': window.utils.getRandomFeatures(OfferInfo.FEATURES, randomArrayLength),
+        'features': window.utils.getArrayWithRandomLength(OfferInfo.FEATURES, randomArrayLength),
         'description': '',
         'photos': []
       },
@@ -78,19 +82,11 @@
     };
   };
 
-  var getOffersArray = function (arrayLength) {
-    var offersArray = [];
-    for (var i = 0; i < arrayLength; i++) {
-      offersArray[i] = generateOffer(i);
-    }
-    return offersArray;
-  };
-  var allOffers = getOffersArray(offersCount);
   window.data = {
-    allOffers: allOffers,
     OfferInfoFeatures: OfferInfo.FEATURES,
-    randomArrayLength: randomArrayLength
+    randomArrayLength: randomArrayLength,
+    offerType: offerType,
+    generateOffer: generateOffer
   };
 })();
-
 

@@ -8,20 +8,20 @@
   var getRandomInteger = function (min, max) {
     return (Math.random() * (max - min)) + min;
   };
-  // создадим функцию для генерации массива случайной длины 
+  // создадим функцию для генерации массива случайной длины
   var getArrayWithRandomLength = function (arr, arraylength) {
-    var randomFeatures = [];
+    var ArrayWithRandomLength = [];
     var arrcopy = arr.slice();
     for (var i = 0; i < arraylength; i++) {
       //  приравняем массив к выражению, в котором используется метод splice по отношению
       // к копии масива, при чем, каждый раз вырезается рандомный элемент
-      randomFeatures[i] = arrcopy.splice(getRandomElement(arrcopy), 1) + '';
+      ArrayWithRandomLength[i] = arrcopy.splice(getRandomElement(arrcopy), 1) + '';
     }
-    return randomFeatures;
+    return ArrayWithRandomLength;
   };
   window.utils = {
     getRandomElement: getRandomElement,
     getRandomInteger: getRandomInteger,
-    getRandomFeatures: getArrayWithRandomLength
+    getArrayWithRandomLength: getArrayWithRandomLength
   };
 })();

@@ -1,10 +1,11 @@
 'use strict';
 (function () {
+  var noticeForm = document.querySelector('.notice__form');
+  var formElements = noticeForm.querySelectorAll('.form__element');
   var timeinSelect = document.querySelector('#timein');
   var timeoutSelect = document.querySelector('#timeout');
   var typeOfApartment = document.getElementById('type');
   var minPriceOfAp = document.getElementById('price');
-  var noticeForm = document.querySelector('.notice__form');
   var numberOfRooms = document.querySelector('#room_number');
   var capacity = document.querySelector('#capacity');
   var capacityOptions = capacity.querySelectorAll('option');
@@ -34,15 +35,15 @@
     minPriceOfAp.min = typeToPrice[typeOfApartment.value];
   };
 
-  var sincRoomAndGuests = function () {
+  var syncRoomAndGuests = function () {
     var capacityValues = roomToGuest[numberOfRooms.value];
     capacityOptions.forEach(function (item) { // запускаем цикл по массиву capacityOptions(2-й селект)
       item.disabled = !capacityValues.includes(item.value);
     });
     capacity.value = capacityValues[0];
   };
-  sincRoomAndGuests();
-  numberOfRooms.addEventListener('change', sincRoomAndGuests);
+  syncRoomAndGuests();
+  numberOfRooms.addEventListener('change', syncRoomAndGuests);
   typeOfApartment.addEventListener('change', syncTypeAndMinPrice);
   timeinSelect.addEventListener('change', equateInOutTime);
   timeoutSelect.addEventListener('change', equateOutInTime);
@@ -51,6 +52,7 @@
     invalidField.style.borderColor = 'red';
   }, true);
   window.form = {
-
+    noticeForm: noticeForm,
+    formElements: formElements
   };
 })();
