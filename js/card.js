@@ -2,6 +2,12 @@
 (function () {
   var map = document.querySelector('.map');
 
+  var offerType = {
+    flat: 'Квартира',
+    house: 'Дом',
+    bungalo: 'Бунгало',
+    palace: 'Дворец'
+  };
 
   var getFeatureElement = function (featureElement) {
     var liFragment = document.createDocumentFragment();
@@ -35,13 +41,13 @@
     var ulElement = offerCard.querySelector('.popup__features');
     offerCard.querySelector('.popup__features').textContent = '';
     offerCard.querySelector('h3').textContent = offer.offer.title;
-    offerCard.querySelector('h4').textContent = window.data.offerType[offer.offer.type];
+    offerCard.querySelector('h4').textContent = offerType[offer.offer.type];
     offerCard.querySelector('.popup__price').innerHTML = offer.offer.price + '&#x20bd;/ночь';
     offerCard.querySelector('small').textContent = offer.offer.address;
     offerCard.querySelector('.popup__avatar').setAttribute('src', offer.author.avatar);
     cardElementP[2].textContent = offer.offer.rooms + ' комнаты для ' + offer.offer.guests + ' гостей';
     cardElementP[3].textContent = 'Заезд после ' + offer.offer.checkin + ', выезд до ' + offer.offer.checkout;
-    var featuresList = window.utils.getArrayWithRandomLength(window.data.OfferInfoFeatures, window.data.randomArrayLength);
+    var featuresList = offer.offer.features;
     for (var i = 0; i < featuresList.length; i++) {
       var element = getFeatureElement(featuresList[i]);
       ulElement.appendChild(element);

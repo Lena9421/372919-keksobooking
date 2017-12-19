@@ -2,7 +2,7 @@
 (function () {
   var OFFERS_COUNT = 8;
   var map = document.querySelector('.map');
-
+  var mapPins = map.querySelector('.map__pins');
   var mapPinMain = document.querySelector('.map__pin--main');
 
   var getOffersArray = function (arrayLength) {
@@ -15,7 +15,6 @@
   var allOffers = getOffersArray(OFFERS_COUNT);
 
   var addPinsToMap = function (array) {
-    var mapPins = map.querySelector('.map__pins');
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < array.length; i++) {
       fragment.appendChild(window.pin.generate(allOffers[i]));
@@ -35,7 +34,7 @@
     if (evt.keyCode === 27) {
       var offerCard = document.querySelector('.map__card');
       map.removeChild(offerCard);
-      window.pin.removeActiveClass();
+      window.pin.deactivate();
     }
   };
   var filtersContainer = document.querySelector('.map__filters-container');

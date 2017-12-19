@@ -51,8 +51,8 @@
     var invalidField = evt.target;
     invalidField.style.borderColor = 'red';
   }, true);
-  window.form = {
-    noticeForm: noticeForm,
-    formElements: formElements
-  };
+  // window.form = {
+  //   noticeForm: noticeForm,
+  //   formElements: formElements
+  // };
 })();

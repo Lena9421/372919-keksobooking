@@ -38,15 +38,6 @@
     Y_MIN: 100,
     Y_MAX: 500
   };
-  var offerType = {
-    flat: 'Квартира',
-    house: 'Дом',
-    bungalo: 'Бунгало',
-    palace: 'Дворец'
-  };
-  // создадим переменную для хранения результата выполнения функции.
-  // Результат - случайная длинна массива в диапазоне от 1 до длины массива с OfferInfo.features
-  var randomArrayLength = window.utils.getRandomInteger(1, OfferInfo.FEATURES.length);
 
   window.utils.getArrayWithRandomLength(OfferInfo.FEATURES, randomArrayLength);
 
@@ -55,6 +46,9 @@
       + ImgProperties.EXTENSION;
   };
 
+  // создадим переменную для хранения результата выполнения функции.
+  // Результат - случайная длинна массива в диапазоне от 1 до длины массива с OfferInfo.features
+  var randomArrayLength = window.utils.getRandomInteger(1, OfferInfo.FEATURES.length);
   var generateOffer = function (i) {
     var locationX = window.utils.getRandomInteger(Location.X_MIN, Location.X_MAX).toFixed();
     var locationY = window.utils.getRandomInteger(Location.Y_MIN, Location.Y_MAX).toFixed();
@@ -83,9 +77,7 @@
   };
 
   window.data = {
-    OfferInfoFeatures: OfferInfo.FEATURES,
-    randomArrayLength: randomArrayLength,
-    offerType: offerType,
+    // featuresArray: generateOffer.offer.feature,
     generateOffer: generateOffer
   };
 })();
