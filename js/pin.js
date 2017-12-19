@@ -14,17 +14,16 @@
   };
 
   var onPinClick = function (evt, offer) {
-    var activePin = document.querySelector('.map__pin--active');
-    if (activePin) {
-      removeActiveClass();
-    }
+    removeActiveClass();
     evt.currentTarget.classList.add('map__pin--active'); // иначе добавляем класс
     // вызываем функцию отрисовки карточки
     window.card.show(offer);
   };
   var removeActiveClass = function () {
     var activePin = document.querySelector('.map__pin--active');
-    activePin.classList.remove('map__pin--active'); // удаляем этот класс
+    if (activePin) {
+      activePin.classList.remove('map__pin--active');
+    }// удаляем этот класс
   };
   window.pin = {
     generate: generatePin,

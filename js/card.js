@@ -10,18 +10,19 @@
     liFragment.appendChild(newElement);
     return liFragment;
   };
-
-  var onCloseClick = function () {
+  var removeCard = function () {
     var card = map.querySelector('article.map__card');
     if (card) {
       map.removeChild(card);
     }
+  };
+  var onCloseClick = function () {
+    removeCard();
     window.pin.deactivate();
   };
   var onCloseEnter = function (evt) {
-    var card = map.querySelector('article.map__card');
     if (evt.keyCode === 13) {
-      map.removeChild(card);
+      removeCard();
       window.pin.deactivate();
     }
   };
@@ -53,6 +54,7 @@
   };
   // результат вставляем в блок map перед классом '.map__filters-container'
   var showCard = function (offer) {
+    removeCard();
     window.map.insertElement(getCard(offer));
   };
 
