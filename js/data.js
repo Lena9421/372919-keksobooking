@@ -77,7 +77,6 @@
   };
 
   window.data = {
-    // featuresArray: generateOffer.offer.feature,
     generateOffer: generateOffer
   };
 })();
