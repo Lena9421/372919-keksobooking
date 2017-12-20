@@ -44,8 +44,6 @@
   };
   var activateForm = function () {
     noticeForm.classList.remove('notice__form--disabled');
-  };
-  var activateFormElements = function () {
     formElements.forEach(function (item) {
       item.removeAttribute('disabled');
     });
@@ -60,7 +58,6 @@
     invalidField.style.borderColor = 'red';
   }, true);
   window.form = {
-    activate: activateForm,
-    activateElements: activateFormElements
+    activate: activateForm
   };
 })();

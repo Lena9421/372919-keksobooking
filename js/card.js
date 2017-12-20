@@ -1,7 +1,6 @@
 'use strict';
 (function () {
   var map = document.querySelector('.map');
-  var mapFilters = map.querySelector('.map__filters-container');
 
   var offerType = {
     flat: 'Квартира',
@@ -35,8 +34,7 @@
   };
   var keyDownEscape = function (evt) {
     if (evt.keyCode === 27) {
-      var offerCard = document.querySelector('.map__card');
-      map.removeChild(offerCard);
+      removeCard();
       window.pin.deactivate();
     }
   };
@@ -63,13 +61,12 @@
     cardElementP[4].textContent = offer.offer.description;
     popUpClose.addEventListener('click', onCloseClick);
     popUpClose.addEventListener('keydown', onCloseEnter);
-    // возвращаем заполненнкую ноду
     return offerCard;
   };
-  // результат вызова вставляем в блок map перед классом '.map__filters-container'
+  // результат вызова getCard вставляем в блок map перед классом '.map__filters-container'
   var showCard = function (offer) {
     removeCard();
-    window.map.insertBefore(getCard(offer), mapFilters);
+    window.map.insertElement(getCard(offer)); // вызываем функцию insertElement
   };
   document.addEventListener('keydown', keyDownEscape);
 
