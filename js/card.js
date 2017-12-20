@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var map = document.querySelector('.map');
+  var mapFilters = map.querySelector('.map__filters-container');
 
   var offerType = {
     flat: 'Квартира',
@@ -65,10 +66,10 @@
     // возвращаем заполненнкую ноду
     return offerCard;
   };
-  // результат вставляем в блок map перед классом '.map__filters-container'
+  // результат вызова вставляем в блок map перед классом '.map__filters-container'
   var showCard = function (offer) {
     removeCard();
-    window.map.insertElement(getCard(offer));
+    window.map.insertBefore(getCard(offer), mapFilters);
   };
   document.addEventListener('keydown', keyDownEscape);
 
