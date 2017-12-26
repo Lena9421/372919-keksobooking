@@ -9,7 +9,7 @@
   var numberOfRooms = document.querySelector('#room_number');
   var capacity = document.querySelector('#capacity');
   var capacityOptions = capacity.querySelectorAll('option');
-
+  var addressField = document.getElementById('address');
   var typeToPrice = {
     'bungalo': 0,
     'flat': 1000,
@@ -58,6 +58,7 @@
     invalidField.style.borderColor = 'red';
   }, true);
   window.form = {
-    activate: activateForm
+    activate: activateForm,
+    addressField: addressField
   };
 })();
