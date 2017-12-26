@@ -34,8 +34,10 @@
   // Добавьте реакцию на перемещение (drag) пина текущего заполняемого объявления
   // .map__pin--main так, чтобы его координаты выводились в поле адрес в следующем формате: x:
   // {{координата X}}, y: {{координата Y}}
-  var Y_MIN = 100;
-  var Y_MAX = 500;
+  var X_MIN = 32.5;
+  var X_MAX = 1160;
+  var Y_MIN = 43;
+  var Y_MAX = 443;
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
     var startCoords = {
@@ -54,19 +56,25 @@
       };
       var finalX = mainPin.offsetLeft - shift.x;
       var finalY = mainPin.offsetTop - shift.y;
+      var formX;
       var formY;
-      if (finalY <= Y_MIN) {
-        mainPin.style.top = Y_MIN + 'px';
-        formY = Y_MIN;
-      } else if (finalY >= Y_MAX) {
-        mainPin.style.top = Y_MAX + 'px';
-        formY = Y_MAX;
-      } else {
-        mainPin.style.top = finalY + 'px';
-        formY = finalY;
+      if (finalX <= X_MIN) {
+        finalX = X_MIN;
+      }
+      if (finalX >= X_MAX) {
+        finalX = X_MAX;
       }
       mainPin.style.left = finalX + 'px';
-      setAddress(finalX, formY);
+      formX = finalX - 33;
+      if (finalY <= Y_MIN) {
+        finalY = Y_MIN;
+      }
+      if (finalY >= Y_MAX) {
+        finalY = Y_MAX;
+      }
+      mainPin.style.top = finalY + 'px';
+      formY = finalY + 57;
+      setAddress(formX, formY);
     };
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
@@ -78,7 +86,7 @@
 
   });
   var setAddress = function (x, y) {
-    window.form.addressField.value = (x - 32) + ', ' + (y - 87);
+    window.form.addressField.value = x + ', ' + y;
   };
   mainPin.addEventListener('mouseup', onMainPinMouseUp);
   window.map = {
